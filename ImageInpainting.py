@@ -7,20 +7,28 @@ class Pixel:
         self.value = value
         self.confidence = confidence
         self.data = data
-        self.is_filled = is_filled
-        self.is_fillfront = is_fillfront
+        self.is_filled = is_filled # filled or not
+        self.is_fillfront = is_fillfront # in the area to be filled
 
-    def compute_dataterm(self):
-        return
+    def compute_data(self):
+        """ Compute the data on linear structures around the pixel. """
+        
+        return self.data
+    
+    def compute_confidence(self):
+        """ Compute confidence of the central pixel of the patch. """
+
+        return self.confidence
 
     def compute_priority(self):
-        return self.confidence * self.compute_dataterm()
+        return self.compute_confidence() * self.compute_data()
 
-def init_image(img_input):
+
+def init_image(img_input, img_mask):
     img = np.empty(shape=img_input.shape, dtype = np.dtype(Pixel))
-    for i in range(img_input.shape[0]):
-        for j in range(img_input.shape[1]):
-            pixel = Pixel(img_input[i][j], 1, 0, False, False)
+    for i in range(img_mask.shape[0]):
+        for j in range(img_mask.shape[1]):
+            pixel = Pixel(img_input[i][j], 1, 0, False, img_mask[i][j] == 255) 
             img[i][j] = pixel
     return img
 
@@ -34,7 +42,7 @@ def generate_result_image(img):
 def find_maxpriority_patch(fillfront):
     max_priority = 0
     for point in fillfront:
-        if point.compute_priority() > max_priority:
+        if point.is_fillfront and point.compute_priority() > max_priority:
             max_priority_point = point
 
     return max_priority_point
@@ -51,11 +59,10 @@ def find_source_patch(target_patch, img):
     return max_similarity_patch
 
 
-
 def copy_imagedata(target_patch, source_patch):
     return
 
-def update_fillfromt(image):
+def update_fillfront(image):
     return
 
 def update_confidence(image):
@@ -73,18 +80,17 @@ def main():
     args = parser.parse_args()
 
     img_input = cv2.imread(args.input, cv2.IMREAD_COLOR) # 3 channel BGR color image
+    img_mask = cv2.imread(args.mask, cv2.IMREAD_GRAYSCALE) # only 255 and 0~20
+    img = init_image(img_input, img_mask)
 
-    img_mask = cv2.imread(args.mask, cv2.IMREAD_GRAYSCALE)
-    print(img_input[0][0])
-    # img = init_image(img_input)
-    # while not is_fillfront_empty(img):
-    #     target_patch = find_maxpriority_patch(img)
-    #     source_patch = find_source_patch(target_patch, img)
-    #     copy_imagedata(target_patch, source_patch)
-    #     update_fillfromt(img)
-    #     update_confidence(img)
-    # img_output = generate_result_image(img)
-    # cv2.imwrite(args.output, img_output)
+    while not is_fillfront_empty(img):
+        target_patch = find_maxpriority_patch(img)
+        source_patch = find_source_patch(target_patch, img)
+        copy_imagedata(target_patch, source_patch)
+        update_fillfront(img)
+        update_confidence(img)
+    img_output = generate_result_image(img)
+    cv2.imwrite(args.output, img_output)
 
 if __name__ == "__main__":
     main()
