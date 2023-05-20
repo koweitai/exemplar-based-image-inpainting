@@ -31,7 +31,7 @@ def generate_result_image(img):
             img_result[i][j] = img[i][j].value
     return img_result
 
-def find_maxpriority_patch():
+def find_maxpriority_patch(fillfront):
     max_priority = 0
     for point in fillfront:
         if point.compute_priority() > max_priority:
@@ -42,7 +42,7 @@ def find_maxpriority_patch():
 def compute_similarity(target_patch, source_patch):
     return
 
-def find_source_patch(target_patch):
+def find_source_patch(target_patch, img):
     max_similarity = 0
     for source_patch in img:
         if compute_similarity(target_patch, source_patch) > max_similarity:
@@ -50,7 +50,12 @@ def find_source_patch(target_patch):
 
     return max_similarity_patch
 
+
+
 def copy_imagedata(target_patch, source_patch):
+    return
+
+def update_fillfromt(image):
     return
 
 def update_confidence(image):
@@ -62,20 +67,24 @@ def is_fillfront_empty(image):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input')
+    parser.add_argument('--mask')
     parser.add_argument('--output')
     parser.add_argument('--patch_size')
     args = parser.parse_args()
 
-    img_input = cv2.imread(args.input, cv2.IMREAD_GRAYSCALE)
-    img = init_image(img_input)
-    while not is_fillfront_empty(img):
-        target_patch = find_maxpriority_patch()
-        source_patch = find_source_patch(target_patch)
-        copy_imagedata(target_patch, source_patch)
-        update_fillfromt(img)
-        update_confidence(img)
-    img_output = generate_result_image(img)
-    cv2.imwrite(args.output, img_output)
+    img_input = cv2.imread(args.input, cv2.IMREAD_COLOR) # 3 channel BGR color image
+
+    img_mask = cv2.imread(args.mask, cv2.IMREAD_GRAYSCALE)
+    print(img_input[0][0])
+    # img = init_image(img_input)
+    # while not is_fillfront_empty(img):
+    #     target_patch = find_maxpriority_patch(img)
+    #     source_patch = find_source_patch(target_patch, img)
+    #     copy_imagedata(target_patch, source_patch)
+    #     update_fillfromt(img)
+    #     update_confidence(img)
+    # img_output = generate_result_image(img)
+    # cv2.imwrite(args.output, img_output)
 
 if __name__ == "__main__":
     main()

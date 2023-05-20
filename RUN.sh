@@ -3,7 +3,6 @@
 if [ ! -d "./result" ]
 then
    mkdir ./result 
-   mkdir ./sample_images
 fi
 
-# python3 main.py --input ./sample_images/sample1.png --output ./result/result1.png --q 1
+python3 ImageInpainting.py --input ./dataset/data8/image.png --mask ./dataset/data8/mask.png --output ./result/result8.png --patch_size 5
