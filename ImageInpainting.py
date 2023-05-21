@@ -2,12 +2,19 @@ import cv2
 import numpy as np
 import argparse
 
+# class Image:
+#     def __init__(self, pixels, contour):
+#         self.pixels = pixels
+#         self.contour = contour
+
 class Pixel:
-    def __init__(self, value, patch, data, is_filled, is_fillfront):
+    def __init__(self, r, c, value, patch, is_filled, is_fillfront):
+        self.r = r
+        self.c = c
         self.value = value # [B, G, R]
         self.patch = patch
         self.confidence = 0 if is_fillfront else 1
-        self.data = self.compute_data()
+        # self.data = self.compute_data()
         self.is_filled = is_filled # filled or not
         self.is_fillfront = is_fillfront # in the area to be filled
 
@@ -15,16 +22,51 @@ class Pixel:
         """ Compute confidence of the central pixel of the patch. """
         return self.confidence
     
-    def compute_data(self):
+    def compute_data(self, contour):
         """ Compute the data on linear structures around the pixel. """
         # normalization factor
         alpha = 255
-        # magnitude, orientation = gradient_magnitude(self.patch)
-        data = 1
+        norm = self.normal_direction(contour)
+
+        gradient_vec = self.gradient_magnitude()
+        data = np.sqrt(norm.dot(gradient_vec)) / alpha
         return data
 
-    def compute_priority(self):
-        return self.compute_confidence() * self.compute_data()
+    def compute_priority(self, contour):
+        return self.compute_confidence() * self.compute_data(contour)
+    
+    def gradient_magnitude(self, k = 2): # per pixel (Sobel)
+        max_gradient = -1
+        for point in self.patch:
+            gr = ((point.patch[0][2] + k * point.patch[1][2] + point.patch[2][2]) - (point.patch[0][0] + k * point.patch[1][0] + point.patch[2][0])) / (k + 2)
+            gc = ((point.patch[0][0] + k * point.patch[0][1] + point.patch[0][2]) - (point.patch[2][0] + k * point.patch[2][1] + point.patch[2][2])) / (k + 2)
+            G = np.hypot(gr, gc) # sqrt(x*x + y*y)
+            if G > max_gradient:
+                max_gradient = G
+                max_gradient_vec = np.array([gc, gr])
+        magnitude = np.sqrt(max_gradient_vec.dot(max_gradient_vec))
+        gradient_vec = max_gradient_vec / magnitude * max_gradient
+        return gradient_vec
+    
+    def normal_direction(self, contour):
+        # theta = np.arctan2(prev_point[0]-next_point[0], prev_point[1]-next_point[1])
+        # normal = theta - 0.5 * np.pi
+        prev_point = [-1, -1]
+        for i in range(len(contour)):
+            point = contour[i]
+            if contour[i] == [self.r, self.c]:
+                if prev_point == [-1, -1]:
+                    prev_point = contour[-1]
+                if i == len(contour)-1:
+                    next_point = contour[0]
+                else:
+                    next_point = contour[i+1]
+                break
+            prev_point = point
+        normal = np.array([prev_point[1]-next_point[1], prev_point[0]-next_point[0]])
+        magnitude = np.sqrt(normal.dot(normal))
+        normal = normal / magnitude
+        return normal
 
 # Tool function
 def is_contour(img, idx):
@@ -36,16 +78,6 @@ def is_contour(img, idx):
     if img[x-1, y] == 0 or img[x, y-1] == 0 or img[x+1, y] == 0 or img[x, y+1] == 0: # 上下左右有不是要填滿的區域
         return True
     return False
-
-def gradient_magnitude(img, k = 2): # per pixel (Sobel)
-    gr = ((img[0][2] + k * img[1][2] + img[2][2]) - (img[0][0] + k * img[1][0] + img[2][0])) / (k + 2)
-    gc = ((img[0][0] + k * img[0][1] + img[0][2]) - (img[2][0] + k * img[2][1] + img[2][2])) / (k + 2)
-    
-    G = np.hypot(gr, gc) # sqrt(x*x + y*y)
-    theta = np.arctan2(gc, gr)
-
-    return (G, theta)
-
 
 # Method fuction
 def init_mask(mask_img): # 
@@ -62,7 +94,7 @@ def init_image(img_input, img_mask, patch_size = 3):
     for i in range(img_mask.shape[0]):
         for j in range(img_mask.shape[1]):
             patch = img_input[max(i-patch_size//2, 0):min(i+1+patch_size//2, img_mask.shape[0]), max(j-patch_size//2, 0):min(j+1+patch_size//2, img_mask.shape[1])]
-            pixel = Pixel(img_input[i][j], patch, 0, False, img_mask[i][j] == 255) 
+            pixel = Pixel(i, j, img_input[i][j], patch, False, img_mask[i][j] == 255) 
             img[i][j] = pixel
             if img_mask[i][j] == 255 and first_mask_pixel_xy == [-1, -1]:
                 first_mask_pixel_xy = [i, j]
@@ -94,7 +126,8 @@ def init_image(img_input, img_mask, patch_size = 3):
             break
         
         # time.sleep(1)
-
+    
+    # img = Image(pixels, contour_point)
     return img, contour_point
 
 def find_maxpriority_patch(fillfront):
@@ -142,6 +175,7 @@ def generate_result_image_test(img_input, img, contour): # 單純測試有沒有
         for j in range(img.shape[1]):
             if [i, j] in contour:
                 img_result[i, j] = [255, 0, 0]
+                print(i, j, img[i][j].normal_direction(contour))
             elif img[i, j].is_fillfront:
                 img_result[i, j] = [255, 255, 255]
             else:
@@ -167,6 +201,7 @@ def main():
     img_mask = cv2.imread(args.mask, cv2.IMREAD_GRAYSCALE) # 255~240 and 0~20
     img_mask = init_mask(img_mask) # only 255 and 0, 255 == in fillfront
     img, contour_point = init_image(img_input, img_mask, args.patch_size) # patch_size is for compute gradient
+    print(img.shape)
     img_output = generate_result_image_test(img_input, img, contour_point) # 單純測試有沒有找到欲填範圍的邊緣
 
 
