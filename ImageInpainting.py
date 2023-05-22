@@ -14,7 +14,7 @@ class Pixel:
         self.r = r
         self.c = c
         self.value = value # [B, G, R]
-        self.confidence = 0 if is_fillfront else 1
+        self.confidence = 0 if is_filled else 1
         self.is_filled = is_filled # filled or not
         self.is_fillfront = is_fillfront # in the area to be filled
 
@@ -42,7 +42,7 @@ class Pixel:
         data = np.abs(norm.dot(gradient)) / alpha
         return data
 
-    def compute_priority(self):
+    def compute_patch_priority(self):
         return self.compute_confidence() * self.compute_data()
     
     def gradient_vector(self, k = 2): # per pixel (Sobel)
@@ -164,16 +164,19 @@ def init_image(img_input, img_mask, patch_size = 3):
     # img = Image(pixels, contour_point)
     return img
 
-def find_maxpriority_patch(fillfront):
+def find_maxpriority_patch(img):
     max_priority = 0
-    for point in fillfront:
-        if point.is_fillfront and point.compute_priority() > max_priority:
+    for idx in contour_point: # idx = [i, j]
+        point = img[idx[0], idx[1]] # point is a Pixel
+        if point.compute_patch_priority() > max_priority:
+            max_priority = point.compute_patch_priority()
             max_priority_point = point
 
     return max_priority_point
 
 def compute_similarity(target_patch, source_patch):
     # target_patch 中會有很多是待填滿的點，在比較的時候是不是只比較已填或不用填的點們去跟 source_patch 比？
+
     return
 
 def find_source_patch(target_patch, img, patch_size):
@@ -264,7 +267,7 @@ def main():
 
     # while not is_fillfront_empty(img):
     #     target_patch = find_maxpriority_patch(img)
-    #     source_patch = find_source_patch(target_patch, img, args.patch_size)
+    #     source_patch = find_source_patch(target_patch, img)
     #     fill_imagedata(target_patch, source_patch)
     #     update_confidence(img)
     # img_output = generate_result_image(img)
