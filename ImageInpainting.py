@@ -194,15 +194,22 @@ def find_maxpriority_patch(img):
 
 def compute_similarity(target_patch, source_patch):
     # target_patch 中會有很多是待填滿的點，在比較的時候是不是只比較已填或不用填的點們去跟 source_patch 比？
+    difference = 0
+    for i in range(patch_size):
+        for j in range(patch_size):
+            if source_patch[i, j].is_filled:
+                p1, p2 = target_patch[i, j].value, source_patch[i, j].value # p1, p2 = [B, G, R], [B, G, R]
 
-    return
+    return 
 
-def find_source_patch(target_patch, img, patch_size):
+def find_source_patch(target_patch_point_idx, img):
+    target_patch = img[target_patch_point_idx[0], target_patch_point_idx[1]].patch
     max_similarity = 0
     max_similarity_patch = target_patch
-    for i in img:
-        for j in i:
-            source_patch = img[i:i+patch_size, j:j+patch_size]
+    for row in img:
+        for ele in row: # ele is a Pixel
+            source_patch = ele.patch
+            # 確保 source_patch 裡面每個點都是有顏色的（填滿的）
             similarity = compute_similarity(target_patch, source_patch)
             if  similarity > max_similarity:
                 max_similarity_patch = source_patch
@@ -219,7 +226,7 @@ def update_confidence(image):
 def is_fillfront_empty(img):
     for i in img:
         for pixel in i:
-            if pixel.is_fillfront and not pixel.is_filled:
+            if not pixel.is_filled:
                 return False
     
     return True
