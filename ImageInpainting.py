@@ -99,14 +99,14 @@ def init_mask(mask_img): #
             output_image[i, j] = 0 if mask_img[i, j] < 128 else 255
     return output_image
 
-def init_image(img_input, img_mask, patch_size = 3):
+def init_image(img_input, img_mask, patch_size=3):
     img = np.empty(shape=img_input.shape[0:2], dtype = np.dtype(Pixel))
     first_mask_pixel_xy = [-1, -1]
     global contour_point
     contour_point = []
     for i in range(img_mask.shape[0]):
         for j in range(img_mask.shape[1]): 
-            pixel = Pixel(i, j, img_input[i][j], img_mask[i][j] == 0) 
+            pixel = Pixel(i, j, img_input[i][j] if img_mask[i][j] == 0 else [0, 0, 0], img_mask[i][j] == 0) 
             img[i][j] = pixel
             if img_mask[i][j] == 255 and first_mask_pixel_xy == [-1, -1]:
                 first_mask_pixel_xy = [i, j]
@@ -167,15 +167,20 @@ def find_maxpriority_patch(img):
 
 def compute_difference(target_patch, source_patch):
     # target_patch 中會有很多是待填滿的點，在比較的時候是不是只比較已填或不用填的點們去跟 source_patch 比？
+    # 確保 source_patch 裡面每個點都是有顏色的（填滿的
     max_difference = 17500000 # if source_patch 不是填滿的
     difference = 0
-    for i in range(patch_size):
-        for j in range(patch_size):
+
+    if source_patch.shape != target_patch.shape:
+        return max_difference
+    
+    for i in range(target_patch.shape[0]):
+        for j in range(target_patch.shape[1]):
             if not source_patch[i, j].is_filled:
                 return max_difference
             
             else:
-                if source_patch[i, j].is_filled: # 只看 target_patch 有填的點
+                if target_patch[i, j].is_filled: # 只看 target_patch 有填的點
                     p1, p2 = target_patch[i, j].value, source_patch[i, j].value # p1, p2 = [B, G, R], [B, G, R]
                     difference += ((p1-p2)**2).sum()
 
@@ -183,12 +188,11 @@ def compute_difference(target_patch, source_patch):
 
 def find_source_patch(target_patch_point_idx, img):
     target_patch = img[target_patch_point_idx[0], target_patch_point_idx[1]].patch
-    min_difference = 0
+    min_difference = 17500000
     min_difference_patch = target_patch
     for row in img:
         for ele in row: # ele is a Pixel
             source_patch = ele.patch
-            # 確保 source_patch 裡面每個點都是有顏色的（填滿的）
             difference = compute_difference(target_patch, source_patch)
             if  difference < min_difference:
                 min_difference_patch = source_patch
@@ -197,7 +201,13 @@ def find_source_patch(target_patch_point_idx, img):
     return min_difference_patch
 
 
-def fill_imagedata(target_patch, source_patch):
+def fill_imagedata(target_patch_pixel, source_patch):
+    for i in range(source_patch.shape[0]):
+        for j in range(source_patch.shape[1]):
+            if not target_patch_pixel.patch[i][j].is_filled:
+                target_patch_pixel.patch[i][j].value = source_patch[i][j].value
+                target_patch_pixel.patch[i][j].is_filled = True
+            # update confidence?
     return
 
 def update_confidence(image):
@@ -211,10 +221,13 @@ def is_fillfront_empty(img):
     
     return True
 
-def generate_result_image_test(img_input, img, point_idx): # 單純測試有沒有找到欲填範圍的邊緣
+def generate_result_image_test(img_input, img, point_idx, source_patch): # 單純測試有沒有找到欲填範圍的邊緣
     img_result = np.zeros(img_input.shape, dtype=np.uint8)
     # max_magnitude = -1
     # max_data = -1
+    for i in range(source_patch.shape[0]):
+        for j in range(source_patch.shape[1]):
+            source_patch[i][j].value = [0, 255, 0]
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
             if [i, j] in contour_point:
@@ -271,13 +284,14 @@ def main():
 
     target_patch_point_idx = find_maxpriority_patch(img)
     source_patch = find_source_patch(target_patch_point_idx, img)
+    fill_imagedata(img[target_patch_point_idx[0]][target_patch_point_idx[1]], source_patch)
     # while not is_fillfront_empty(img):
     #     target_patch_point_idx = find_maxpriority_patch(img)
     #     source_patch = find_source_patch(target_patch, img)
     #     fill_imagedata(target_patch, source_patch)
     #     update_confidence(img)
     # img_output = generate_result_image(img)
-    img_output = generate_result_image_test(img_input, img, target_patch_point_idx) # 單純測試有沒有找到欲填範圍的邊緣
+    img_output = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
     cv2.imwrite(args.output, img_output)
 
 if __name__ == "__main__":
