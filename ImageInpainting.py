@@ -10,13 +10,12 @@ alpha = 255 # normalization factor
 #         self.contour = contour
 
 class Pixel:
-    def __init__(self, r, c, value, is_filled, is_fillfront):
+    def __init__(self, r, c, value, is_filled):
         self.r = r
         self.c = c
         self.value = value # [B, G, R]
         self.confidence = 1 if is_filled else 0
         self.is_filled = is_filled # filled or not
-        self.is_fillfront = is_fillfront # in the area to be filled
 
     def set_patch(self, patch):
         self.patch = patch
@@ -59,14 +58,12 @@ class Pixel:
                 if gradient > max_gradient:
                     max_gradient = gradient
                     max_gradient_vec = np.array([gc, gr])
-        magnitude = np.sqrt(max_gradient_vec.dot(max_gradient_vec))
+        # magnitude = np.sqrt(max_gradient_vec.dot(max_gradient_vec))
         # gradient_vec = max_gradient_vec / magnitude * max_gradient # normalize?
         gradient_vec = max_gradient_vec
         return gradient_vec
     
     def normal_direction(self):
-        # theta = np.arctan2(prev_point[0]-next_point[0], prev_point[1]-next_point[1])
-        # normal = theta - 0.5 * np.pi
         prev_point = [-1, -1]
         for i in range(len(contour_point)):
             point = contour_point[i]
@@ -109,7 +106,7 @@ def init_image(img_input, img_mask, patch_size = 3):
     contour_point = []
     for i in range(img_mask.shape[0]):
         for j in range(img_mask.shape[1]): 
-            pixel = Pixel(i, j, img_input[i][j], img_mask[i][j] == 0, img_mask[i][j] == 255) 
+            pixel = Pixel(i, j, img_input[i][j], img_mask[i][j] == 0) 
             img[i][j] = pixel
             if img_mask[i][j] == 255 and first_mask_pixel_xy == [-1, -1]:
                 first_mask_pixel_xy = [i, j]
@@ -124,41 +121,17 @@ def init_image(img_input, img_mask, patch_size = 3):
                     if i+i_patch-1 > 0 and i+i_patch-1 < img_input.shape[0] and j+j_patch-1 > 0 and j+j_patch-1 < img_input.shape[1]:
                         neighbors[i_patch][j_patch] = img[i+i_patch-1][j+j_patch-1]
                     else:
-                        pixel = Pixel(-1, -1, [-1, -1, -1], -1, -1) # Should not be -1? 算gradient會有問題
+                        pixel = Pixel(-1, -1, [-1, -1, -1], -1) # Should not be -1? 算gradient會有問題
                         neighbors[i_patch][j_patch] = pixel
             img[i][j].set_neighbors(neighbors)
 
     now_x, now_y = first_mask_pixel_xy
     contour_point.append(first_mask_pixel_xy)
-    # break_point = False # 找完所有邊緣曲線上的點
 
     # 為了算邊緣線上點的法向量，找所有邊緣曲線的點放進 contour_point，而且要 contour_point 裏的順序是連著線的
     # 要處理很多個區塊要補的狀況！！！
-    '''
-    while True: 
-        left, right, up, down = max(now_x-patch_size//2, 0), min(now_x+1+patch_size//2, img_mask.shape[0]), max(now_y-patch_size//2, 0), min(now_y+1+patch_size//2, img_mask.shape[1])
-        patch = img_mask[left:right, up:down]
-
-        next = False # 可以找下一個邊緣曲線上的點
-        for i in range(patch.shape[0]):
-            for j in range(patch.shape[1]):
-                this_point = [left + i , up + j]
-                if is_contour(img_mask, this_point) and this_point not in contour_point:
-                    contour_point.append(this_point)
-                    now_x, now_y = this_point
-                    next = True
-                    break
-                if len(contour_point) > 30 and [left + i , up + j] == first_mask_pixel_xy: # 找回原本的點了（30 只是隨便設定一個數）
-                    break_point = True
-            if next:
-                break
-        
-        if break_point:
-            break
-        # time.sleep(1)
-    '''
     while True:
-        if len(contour_point) > 1 and [now_x, now_y] == first_mask_pixel_xy: # 找回原本的點了（30 只是隨便設定一個數）
+        if len(contour_point) > 1 and [now_x, now_y] == first_mask_pixel_xy: # 找回原本的點了
             break
         neighbors = img[now_x][now_y].neighbors
         connected_4 = ([0, 1], [1, 2], [2, 1], [1, 0])
@@ -251,7 +224,7 @@ def generate_result_image_test(img_input, img, point_idx): # 單純測試有沒�
                 #     max_data = data
                 #     max_data_norm = norm
                 #     max_data_gradient = gradient
-            elif img[i, j].is_fillfront:
+            elif not img[i, j].is_filled:
                 img_result[i, j] = [255, 255, 255]
             else:
                 img_result[i, j] = img[i, j].value
@@ -284,7 +257,6 @@ def main():
     global shape
     shape = img_input.shape
     img = init_image(img_input, img_mask, args.patch_size) # patch_size is for compute gradient
-    # print(img.shape)
 
     # 目前完成了找到欲填範圍的邊緣線(演算法有點小漏洞，待修），可以算出邊緣線上點的法向量（np)
     # 而線性結構方向向量（Ip）可以用單元三在教 Sobel 時算 gradient_vector 的部分
