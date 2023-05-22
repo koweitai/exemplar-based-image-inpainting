@@ -30,7 +30,7 @@ class Pixel:
             for ele in row:
                 if ele.is_filled:
                     confidence_sum += ele.confidence
-        self.confidence =  confidence_sum / (patch_size**2)
+        self.confidence =  confidence_sum / (patch_size**2) # 面積應該是self.patch.shape[0]*self.patch.shape[1]?
         # print(f"[{self.r}, {self.c}]'s confidence: {self.confidence}")    
         return self.confidence
     
