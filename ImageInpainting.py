@@ -85,13 +85,12 @@ class Pixel:
         return normal
 
 # Tool function
-def is_contour(img, idx):
-    x, y = idx
-    if img[x, y] == 0: # 不是要填滿的區域
+def is_contour(pixel):
+    if pixel.is_filled == 1: # 已經填滿的區域
         return False
-    if x-1 < 0 or x+1 >= img.shape[0] or y-1 < 0 or y+1 >= img.shape[1]: # 該要填滿點在圖的邊邊，視作邊緣
+    if pixel.r-1 < 0 or pixel.r+1 >= shape[0] or pixel.c-1 < 0 or pixel.c+1 >= shape[1]: # 該要填滿點在圖的邊邊，視作邊緣
         return True
-    if img[x-1, y] == 0 or img[x, y-1] == 0 or img[x+1, y] == 0 or img[x, y+1] == 0: # 上下左右有不是要填滿的區域
+    if pixel.neighbors[0, 1].is_filled == 1 or pixel.neighbors[1, 2].is_filled == 1 or pixel.neighbors[2, 1].is_filled == 1 or pixel.neighbors[1, 0].is_filled == 1: # 上下左右有已經填滿的區域
         return True
     return False
 
@@ -125,15 +124,16 @@ def init_image(img_input, img_mask, patch_size = 3):
                     if i+i_patch-1 > 0 and i+i_patch-1 < img_input.shape[0] and j+j_patch-1 > 0 and j+j_patch-1 < img_input.shape[1]:
                         neighbors[i_patch][j_patch] = img[i+i_patch-1][j+j_patch-1]
                     else:
-                        pixel = Pixel(-1, -1, [-1, -1, -1], -1, -1)
+                        pixel = Pixel(-1, -1, [-1, -1, -1], -1, -1) # Should not be -1? 算gradient會有問題
                         neighbors[i_patch][j_patch] = pixel
             img[i][j].set_neighbors(neighbors)
 
     now_x, now_y = first_mask_pixel_xy
     contour_point.append(first_mask_pixel_xy)
-    break_point = False # 找完所有邊緣曲線上的點
+    # break_point = False # 找完所有邊緣曲線上的點
 
     # 為了算邊緣線上點的法向量，找所有邊緣曲線的點放進 contour_point，而且要 contour_point 裏的順序是連著線的
+    '''
     while True: 
         left, right, up, down = max(now_x-patch_size//2, 0), min(now_x+1+patch_size//2, img_mask.shape[0]), max(now_y-patch_size//2, 0), min(now_y+1+patch_size//2, img_mask.shape[1])
         patch = img_mask[left:right, up:down]
@@ -157,9 +157,27 @@ def init_image(img_input, img_mask, patch_size = 3):
         # time.sleep(1)
     '''
     while True:
+        print(now_x, now_y)
+        if len(contour_point) > 1 and [now_x, now_y] == first_mask_pixel_xy: # 找回原本的點了（30 只是隨便設定一個數）
+            break
         neighbors = img[now_x][now_y].neighbors
-        break
-    ''' 
+        connected_4 = ([0, 1], [1, 2], [2, 1], [1, 0])
+        connected_8 = ([0, 0], [0, 2], [2, 2], [2, 0])
+        found = False
+        for point in connected_4:
+            point_coord = [now_x+point[0]-1, now_y+point[1]-1]
+            if is_contour(neighbors[point[0]][point[1]]) and point_coord not in contour_point:
+                contour_point.append(point_coord)
+                now_x, now_y = point_coord
+                found = True
+                break
+        if not found:
+            for point in connected_8:
+                point_coord = [now_x+point[0]-1, now_y+point[1]-1]
+                if is_contour(neighbors[point[0]][point[1]]) and point_coord not in contour_point:
+                    contour_point.append(point_coord)
+                    now_x, now_y = point_coord
+                    break
     
     # img = Image(pixels, contour_point)
     return img
@@ -259,6 +277,8 @@ def main():
     img_mask = init_mask(img_mask) # only 255 and 0, 255 == in fillfront
     global patch_size
     patch_size = args.patch_size
+    global shape
+    shape = img_input.shape
     img = init_image(img_input, img_mask, args.patch_size) # patch_size is for compute gradient
     # print(img.shape)
 
