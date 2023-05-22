@@ -26,6 +26,13 @@ class Pixel:
 
     def compute_confidence(self):
         """ Compute confidence of the central pixel of the patch. """
+        confidence_sum = 0
+        for row in self.patch:
+            for ele in row:
+                if ele.is_filled:
+                    confidence_sum += ele.confidence
+
+        self.confidence =  confidence_sum / (patch_size**2)    
         return self.confidence
     
     def compute_data(self):
@@ -113,7 +120,7 @@ def init_image(img_input, img_mask, patch_size = 3):
                         value_patch[i_patch][j_patch] = img_input[i+i_patch-1][j+j_patch-1]
                     else:
                         value_patch[i_patch][j_patch] = [-1, -1, -1]
-            pixel = Pixel(i, j, img_input[i][j], False, img_mask[i][j] == 255, value_patch) 
+            pixel = Pixel(i, j, img_input[i][j], img_mask[i][j] == 255, img_mask[i][j] == 255, value_patch) 
             img[i][j] = pixel
             if img_mask[i][j] == 255 and first_mask_pixel_xy == [-1, -1]:
                 first_mask_pixel_xy = [i, j]
