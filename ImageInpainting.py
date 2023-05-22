@@ -92,14 +92,14 @@ def is_contour(pixel):
     return False
 
 # Method fuction
-def init_mask(mask_img): # 
+def init_mask(mask_img):
     output_image = np.ones_like(mask_img)
     for i in range(mask_img.shape[0]):
         for j in range(mask_img.shape[1]):
             output_image[i, j] = 0 if mask_img[i, j] < 128 else 255
     return output_image
 
-def init_image(img_input, img_mask, patch_size=3):
+def init_image(img_input, img_mask):
     img = np.empty(shape=img_input.shape[0:2], dtype = np.dtype(Pixel))
     global contour_point
     contour_point = []
@@ -123,10 +123,7 @@ def init_image(img_input, img_mask, patch_size=3):
             img[i][j].set_neighbors(neighbors)
 
     update_contour_point(img)
-    # 為了算邊緣線上點的法向量，找所有邊緣曲線的點放進 contour_point，而且要 contour_point 裏的順序是連著線的
-    # 要處理很多個區塊要補的狀況！！！
     
-    # img = Image(pixels, contour_point)
     return img
 
 def find_maxpriority_patch(img):
@@ -177,7 +174,6 @@ def find_source_patch(target_patch_point_idx, img):
 
     return min_difference_patch
 
-
 def fill_imagedata(target_patch_pixel, source_patch):
     for i in range(source_patch.shape[0]):
         for j in range(source_patch.shape[1]):
@@ -188,10 +184,10 @@ def fill_imagedata(target_patch_pixel, source_patch):
                 target_patch_pixel.patch[i][j].confidence = target_patch_pixel.confidence
     return
 
-# def update_confidence(image):
-#     return
-
 def update_contour_point(img):
+    # 為了算邊緣線上點的法向量，找所有邊緣曲線的點放進 contour_point，而且要 contour_point 裏的順序是連著線的
+    # 要處理很多個區塊要補的狀況！！！
+    # 要處理填滿隙縫的問題！
     contour_point.clear()
     first_mask_pixel_xy = [-1, -1]
     found = False
@@ -226,29 +222,18 @@ def update_contour_point(img):
             break
     return
 
-# def is_fillfront_empty(img):
-#     for i in img:
-#         for pixel in i:
-#             if not pixel.is_filled:
-#                 return False
-    
-#     return True
-
-def generate_result_image_test(img_input, img, point_idxs, source_patches): # 單純測試有沒有找到欲填範圍的邊緣
+def generate_result_image_test(img_input, img, point_idx, source_patch): # 單純測試有沒有找到欲填範圍的邊緣
     img_result = np.zeros(img_input.shape, dtype=np.uint8)
     # max_magnitude = -1
     # max_data = -1
-    for source_patch in source_patches:
-        for i in range(source_patch.shape[0]):
-            for j in range(source_patch.shape[1]):
-                source_patch[i][j].value = [0, 255, 0]
+    
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
             if [i, j] in contour_point:
                 img_result[i, j] = [255, 0, 0]
-                norm = img[i][j].normal_direction()
-                gradient = img[i][j].gradient_vector()
-                data = img[i][j].compute_data()
+                # norm = img[i][j].normal_direction()
+                # gradient = img[i][j].gradient_vector()
+                # data = img[i][j].compute_data()
                 # print(i, j, norm, gradient, data)
                 # magnitude = np.sqrt(gradient.dot(gradient))
                 # if magnitude > max_magnitude:
@@ -262,10 +247,14 @@ def generate_result_image_test(img_input, img, point_idxs, source_patches): # �
                 img_result[i, j] = [255, 255, 255]
             else:
                 img_result[i, j] = img[i, j].value
+    # for source_patch in source_patches:
+    for i in range(source_patch.shape[0]):
+        for j in range(source_patch.shape[1]):
+            img_result[source_patch[i][j].r, source_patch[i][j].c] = [0, 255, 0]
     # print(max_magnitude, max_magnitude_vec)
     # print(max_data, max_data_norm, max_data_gradient)
-    for point_idx in point_idxs:
-        img_result[point_idx[0], point_idx[1]] = [0, 0, 255]
+    # for point_idx in point_idxs:
+    img_result[point_idx[0], point_idx[1]] = [0, 0, 255]
     # max_data會到 265.30946553035, norm=[114.03946685 228.0789337 ], gradient=[111.75 240.75]，超過255是正常的嗎？
     return img_result
     
@@ -291,30 +280,29 @@ def main():
     patch_size = args.patch_size
     global shape
     shape = img_input.shape
-    img = init_image(img_input, img_mask, args.patch_size) # patch_size is for compute gradient
-
-    # 目前完成了找到欲填範圍的邊緣線(演算法有點小漏洞，待修），可以算出邊緣線上點的法向量（np)
-    # 而線性結構方向向量（Ip）可以用單元三在教 Sobel 時算 gradient_vector 的部分
-    # 但算 np 和 Ip 還沒寫完 （for compute data）
+    img = init_image(img_input, img_mask)
 
     # target_patch_point_idx = find_maxpriority_patch(img)
     # source_patch = find_source_patch(target_patch_point_idx, img)
     # fill_imagedata(img[target_patch_point_idx[0]][target_patch_point_idx[1]], source_patch)
     
-    source_patches = []
-    target_patch_point_idxs = []
     # while not is_fillfront_empty(img):
-    # while len(contour_point) != 0:
-    for i in range(20):
+    # for i in range(20):
+    iter = 0
+    while len(contour_point) != 0:
+        print("iter", iter)
         target_patch_point_idx = find_maxpriority_patch(img)
         source_patch = find_source_patch(target_patch_point_idx, img)
-        target_patch_point_idxs.append(target_patch_point_idx)
-        source_patches.append(source_patch)
+        # target_patch_point_idxs.append(target_patch_point_idx)
+        # source_patches.append(source_patch)
         fill_imagedata(img[target_patch_point_idx[0]][target_patch_point_idx[1]], source_patch)
         # update_confidence(img)
+        img_output = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
+        cv2.imwrite(f"./result/result8_iter{iter}.png", img_output)
         update_contour_point(img)
+        iter += 1
     # img_output = generate_result_image(img)
-    img_output = generate_result_image_test(img_input, img, target_patch_point_idxs, source_patches) # 單純測試有沒有找到欲填範圍的邊緣
+    
     cv2.imwrite(args.output, img_output)
 
 if __name__ == "__main__":
