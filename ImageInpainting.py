@@ -115,7 +115,6 @@ def init_image(img_input, img_mask, patch_size = 3):
             if img_mask[i][j] == 255 and first_mask_pixel_xy == [-1, -1]:
                 first_mask_pixel_xy = [i, j]
 
-    print("Before patch and neighbors")
     for i in range(img_mask.shape[0]):
         for j in range(img_mask.shape[1]):
             patch = img[max(i-patch_size//2, 0):min(i+1+patch_size//2, img_mask.shape[0]), max(j-patch_size//2, 0):min(j+1+patch_size//2, img_mask.shape[1])]
@@ -129,7 +128,6 @@ def init_image(img_input, img_mask, patch_size = 3):
                         pixel = Pixel(-1, -1, [-1, -1, -1], -1, -1)
                         neighbors[i_patch][j_patch] = pixel
             img[i][j].set_neighbors(neighbors)
-    print("After patch and neighbors")
 
     now_x, now_y = first_mask_pixel_xy
     contour_point.append(first_mask_pixel_xy)
