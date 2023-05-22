@@ -287,7 +287,7 @@ def main():
         fill_imagedata(img[target_patch_point_idx[0]][target_patch_point_idx[1]], source_patch)
         # update_confidence(img)
         img_output = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
-        cv2.imwrite(f"./result/test/result8_iter{iter}.png", img_output)
+        cv2.imwrite(f"./result/test/result9_iter{iter}.png", img_output)
         update_contour_point(img)
         iter += 1
     # img_output = generate_result_image(img)
