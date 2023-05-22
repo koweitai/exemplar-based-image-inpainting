@@ -165,30 +165,37 @@ def find_maxpriority_patch(img):
 
     return max_priority_point_idx
 
-def compute_similarity(target_patch, source_patch):
+def compute_difference(target_patch, source_patch):
     # target_patch 中會有很多是待填滿的點，在比較的時候是不是只比較已填或不用填的點們去跟 source_patch 比？
+    max_difference = 17500000 # if source_patch 不是填滿的
     difference = 0
     for i in range(patch_size):
         for j in range(patch_size):
-            if source_patch[i, j].is_filled:
-                p1, p2 = target_patch[i, j].value, source_patch[i, j].value # p1, p2 = [B, G, R], [B, G, R]
+            if not source_patch[i, j].is_filled:
+                return max_difference
+            
+            else:
+                if source_patch[i, j].is_filled: # 只看 target_patch 有填的點
+                    p1, p2 = target_patch[i, j].value, source_patch[i, j].value # p1, p2 = [B, G, R], [B, G, R]
+                    difference += ((p1-p2)**2).sum()
 
-    return 
+    return difference
 
 def find_source_patch(target_patch_point_idx, img):
     target_patch = img[target_patch_point_idx[0], target_patch_point_idx[1]].patch
-    max_similarity = 0
-    max_similarity_patch = target_patch
+    min_difference = 0
+    min_difference_patch = target_patch
     for row in img:
         for ele in row: # ele is a Pixel
             source_patch = ele.patch
             # 確保 source_patch 裡面每個點都是有顏色的（填滿的）
-            similarity = compute_similarity(target_patch, source_patch)
-            if  similarity > max_similarity:
-                max_similarity_patch = source_patch
-                max_similarity = similarity
+            difference = compute_difference(target_patch, source_patch)
+            if  difference < min_difference:
+                min_difference_patch = source_patch
+                min_difference = difference
 
-    return max_similarity_patch
+    return min_difference_patch
+
 
 def fill_imagedata(target_patch, source_patch):
     return
@@ -263,6 +270,7 @@ def main():
     # 但算 np 和 Ip 還沒寫完 （for compute data）
 
     target_patch_point_idx = find_maxpriority_patch(img)
+    source_patch = find_source_patch(target_patch_point_idx, img)
     # while not is_fillfront_empty(img):
     #     target_patch_point_idx = find_maxpriority_patch(img)
     #     source_patch = find_source_patch(target_patch, img)
