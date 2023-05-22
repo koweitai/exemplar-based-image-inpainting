@@ -158,23 +158,21 @@ def compute_difference(target_patch, source_patch):
     # 確保 source_patch 裡面每個點都是有顏色的（填滿的
     max_difference = 17500000 # if source_patch 不是填滿的
     difference = 0
-    points_num = 0
 
     if source_patch.shape != target_patch.shape:
         return max_difference
     
     for i in range(target_patch.shape[0]):
         for j in range(target_patch.shape[1]):
-            if source_patch[i, j].r == target_patch[i, j].r and source_patch[i, j].c == target_patch[i, j].c:
+            if not source_patch[i, j].is_filled:
                 return max_difference
             
             else:
                 if target_patch[i, j].is_filled: # 只看 target_patch 有填的點
                     p1, p2 = target_patch[i, j].value, source_patch[i, j].value # p1, p2 = [B, G, R], [B, G, R]
                     difference += ((p1-p2)**2).sum()
-                    points_num += 1
 
-    return difference / points_num
+    return difference
 
 def find_source_patch(target_patch_point_idx, img):
     target_patch = img[target_patch_point_idx[0], target_patch_point_idx[1]].patch
