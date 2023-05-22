@@ -10,16 +10,14 @@ alpha = 255 # normalization factor
 #         self.contour = contour
 
 class Pixel:
-    def __init__(self, r, c, value, is_filled, is_fillfront, value_patch):
+    def __init__(self, r, c, value, is_filled, is_fillfront, neighbors):
         self.r = r
         self.c = c
         self.value = value # [B, G, R]
-        # self.patch = patch
         self.confidence = 0 if is_fillfront else 1
-        # self.data = self.compute_data()
         self.is_filled = is_filled # filled or not
         self.is_fillfront = is_fillfront # in the area to be filled
-        self.value_patch = value_patch # 九宮格的value
+        self.neighbors = neighbors # 九宮格的value
 
     def set_patch(self, patch):
         self.patch = patch
@@ -50,12 +48,10 @@ class Pixel:
         for i in range(self.patch.shape[0]):
             for j in range(self.patch.shape[1]):
                 point = self.patch[i][j]
-                # gr = ((point.patch[patch_size//2-1][patch_size//2+1] + k * point.patch[patch_size//2][patch_size//2+1] + point.patch[patch_size//2+1][patch_size//2+1]) - (point.patch[patch_size//2-1][patch_size//2-1] + k * point.patch[patch_size//2][patch_size//2-1] + point.patch[patch_size//2+1][patch_size//2-1])) / (k + 2)
-                # gc = ((point.patch[patch_size//2-1][patch_size//2-1] + k * point.patch[patch_size//2-1][patch_size//2] + point.patch[patch_size//2-1][patch_size//2+1]) - (point.patch[patch_size//2+1][patch_size//2-1] + k * point.patch[patch_size//2+1][patch_size//2] + point.patch[patch_size//2+1][patch_size//2+1])) / (k + 2)
                 G = [0 for _ in range(3)]
                 for channel in range(3):
-                    gr = ((point.value_patch[0][2][channel] + k * point.value_patch[1][2][channel] + point.value_patch[2][2][channel]) - (point.value_patch[0][0][channel] + k * point.value_patch[1][0][channel] + point.value_patch[2][0][channel])) / (k + 2)
-                    gc = ((point.value_patch[0][0][channel] + k * point.value_patch[0][1][channel] + point.value_patch[0][2][channel]) - (point.value_patch[2][0][channel] + k * point.value_patch[2][1][channel] + point.value_patch[2][2][channel])) / (k + 2)
+                    gr = ((point.neighbors[0][2][channel] + k * point.neighbors[1][2][channel] + point.neighbors[2][2][channel]) - (point.neighbors[0][0][channel] + k * point.neighbors[1][0][channel] + point.neighbors[2][0][channel])) / (k + 2)
+                    gc = ((point.neighbors[0][0][channel] + k * point.neighbors[0][1][channel] + point.neighbors[0][2][channel]) - (point.neighbors[2][0][channel] + k * point.neighbors[2][1][channel] + point.neighbors[2][2][channel])) / (k + 2)
                     G[channel] = np.hypot(gr, gc) # sqrt(x*x + y*y)
                 gradient = sum(G) / 3
                 if gradient > max_gradient:
@@ -112,14 +108,14 @@ def init_image(img_input, img_mask, patch_size = 3):
     contour_point = []
     for i in range(img_mask.shape[0]):
         for j in range(img_mask.shape[1]):
-            # value_patch = img_input[max(i-patch_size//2, 0):min(i+1+patch_size//2, img_mask.shape[0]), max(j-patch_size//2, 0):min(j+1+patch_size//2, img_mask.shape[1])]
-            value_patch = np.zeros([3, 3, 3], dtype=np.int8)
+            # neighbors = img_input[max(i-patch_size//2, 0):min(i+1+patch_size//2, img_mask.shape[0]), max(j-patch_size//2, 0):min(j+1+patch_size//2, img_mask.shape[1])]
+            neighbors = np.zeros([3, 3, 3], dtype=np.int8)
             for i_patch in range(3):
                 for j_patch in range(3):
                     if i+i_patch-1 > 0 and i+i_patch-1 < img_input.shape[0] and j+j_patch-1 > 0 and j+j_patch-1 < img_input.shape[1]:
-                        value_patch[i_patch][j_patch] = img_input[i+i_patch-1][j+j_patch-1]
+                        neighbors[i_patch][j_patch] = img_input[i+i_patch-1][j+j_patch-1]
                     else:
-                        value_patch[i_patch][j_patch] = [-1, -1, -1]
+                        neighbors[i_patch][j_patch] = [-1, -1, -1]
             pixel = Pixel(i, j, img_input[i][j], img_mask[i][j] == 255, img_mask[i][j] == 255, value_patch) 
             img[i][j] = pixel
             if img_mask[i][j] == 255 and first_mask_pixel_xy == [-1, -1]:
@@ -135,6 +131,7 @@ def init_image(img_input, img_mask, patch_size = 3):
     break_point = False # 找完所有邊緣曲線上的點
 
     # 為了算邊緣線上點的法向量，找所有邊緣曲線的點放進 contour_point，而且要 contour_point 裏的順序是連著線的
+    '''
     while True: 
         left, right, up, down = max(now_x-patch_size//2, 0), min(now_x+1+patch_size//2, img_mask.shape[0]), max(now_y-patch_size//2, 0), min(now_y+1+patch_size//2, img_mask.shape[1])
         patch = img_mask[left:right, up:down]
@@ -155,6 +152,10 @@ def init_image(img_input, img_mask, patch_size = 3):
         
         if break_point:
             break
+    '''
+    while True:
+        neighbors = img[now_x][now_y].neighbors
+        break
         
         # time.sleep(1)
     
