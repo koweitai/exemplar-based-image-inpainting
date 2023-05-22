@@ -133,6 +133,7 @@ def init_image(img_input, img_mask, patch_size = 3):
     # break_point = False # 找完所有邊緣曲線上的點
 
     # 為了算邊緣線上點的法向量，找所有邊緣曲線的點放進 contour_point，而且要 contour_point 裏的順序是連著線的
+    # 要處理很多個區塊要補的狀況！！！
     '''
     while True: 
         left, right, up, down = max(now_x-patch_size//2, 0), min(now_x+1+patch_size//2, img_mask.shape[0]), max(now_y-patch_size//2, 0), min(now_y+1+patch_size//2, img_mask.shape[1])
@@ -157,27 +158,23 @@ def init_image(img_input, img_mask, patch_size = 3):
         # time.sleep(1)
     '''
     while True:
-        print(now_x, now_y)
         if len(contour_point) > 1 and [now_x, now_y] == first_mask_pixel_xy: # 找回原本的點了（30 只是隨便設定一個數）
             break
         neighbors = img[now_x][now_y].neighbors
         connected_4 = ([0, 1], [1, 2], [2, 1], [1, 0])
         connected_8 = ([0, 0], [0, 2], [2, 2], [2, 0])
         found = False
-        for point in connected_4:
+        for point in connected_4+connected_8:
             point_coord = [now_x+point[0]-1, now_y+point[1]-1]
+            if point_coord[0] < 0 or point_coord[0] >= shape[0] or point_coord[1] < 0 or point_coord[1] >= shape[1]:
+                continue
             if is_contour(neighbors[point[0]][point[1]]) and point_coord not in contour_point:
                 contour_point.append(point_coord)
                 now_x, now_y = point_coord
                 found = True
                 break
         if not found:
-            for point in connected_8:
-                point_coord = [now_x+point[0]-1, now_y+point[1]-1]
-                if is_contour(neighbors[point[0]][point[1]]) and point_coord not in contour_point:
-                    contour_point.append(point_coord)
-                    now_x, now_y = point_coord
-                    break
+            break
     
     # img = Image(pixels, contour_point)
     return img
@@ -286,6 +283,7 @@ def main():
     # 而線性結構方向向量（Ip）可以用單元三在教 Sobel 時算 gradient_vector 的部分
     # 但算 np 和 Ip 還沒寫完 （for compute data）
 
+    target_patch_point_idx = find_maxpriority_patch(img)
     # while not is_fillfront_empty(img):
     #     target_patch_point_idx = find_maxpriority_patch(img)
     #     source_patch = find_source_patch(target_patch, img)
