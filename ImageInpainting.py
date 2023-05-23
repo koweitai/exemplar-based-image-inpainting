@@ -121,7 +121,7 @@ class Pixel:
             if point == cur_point:
                 continue
             dist = (point[0]-cur_point[0])**2 + (point[1]-cur_point[1])**2
-            if dist <= 2:
+            if dist >= 2 and dist <= 5:
                 if prev_point == [-1, -1]:
                     prev_point = point
                 elif next_point == [-1, -1]:
@@ -252,17 +252,17 @@ def update_contour_point(img):
 
 def generate_result_image_test(img_input, img, point_idx, source_patch): # 單純測試有沒有找到欲填範圍的邊緣
     img_result = np.zeros(img_input.shape, dtype=np.uint8)
-    img_confidence = np.zeros(img_input.shape[:-1], dtype=np.uint8)
-    img_data = np.zeros(img_input.shape[:-1], dtype=np.uint8)
-    img_gradient = np.zeros(img_input.shape[:-1], dtype=np.uint8)
+    # img_confidence = np.zeros(img_input.shape[:-1], dtype=np.uint8)
+    # img_data = np.zeros(img_input.shape[:-1], dtype=np.uint8)
+    # img_gradient = np.zeros(img_input.shape[:-1], dtype=np.uint8)
     # max_magnitude = -1
     # max_data = -1
     
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
-            img_confidence[i, j] = int(img[i, j].confidence * 255)
-            img_data[i, j] = np.clip(img[i, j].data, 0, 255)
-            img_gradient[i, j] = np.clip(img[i, j].gradient, 0, 255)
+            # img_confidence[i, j] = int(img[i, j].confidence * 255)
+            # img_data[i, j] = np.clip(img[i, j].data, 0, 255)
+            # img_gradient[i, j] = np.clip(img[i, j].gradient, 0, 255)
             if [i, j] in contour_point:
                 img_result[i, j] = [255, 0, 0]
                 # norm = img[i][j].normal_direction()
@@ -290,10 +290,11 @@ def generate_result_image_test(img_input, img, point_idx, source_patch): # 單�
     # for point_idx in point_idxs:
     img_result[point_idx[0], point_idx[1]] = [0, 0, 255]
     # max_data會到 265.30946553035, norm=[114.03946685 228.0789337 ], gradient=[111.75 240.75]，超過255是正常的嗎？
-    return img_result, img_confidence, img_data, img_gradient
+    # return img_result, img_confidence, img_data, img_gradient
+    return img_result
     
-def generate_result_image(img_input, img):
-    img_result = np.zeros(img_input.shape, dtype=np.uint8)
+def generate_result_image(img):
+    img_result = np.zeros(img.shape, dtype=np.uint8)
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
             img_result[i][j] = img[i][j].value
@@ -320,9 +321,9 @@ def main():
     # source_patch = find_source_patch(target_patch_point_idx, img)
     # fill_imagedata(img[target_patch_point_idx[0]][target_patch_point_idx[1]], source_patch)
     
-    # iter = 0
-    # while len(contour_point) != 0:
-    for iter in range(10):
+    # for iter in range(10):
+    iter = 0
+    while len(contour_point) != 0:
         print("iter", iter)
         target_patch_point_idx = find_maxpriority_patch(img)
         source_patch = find_source_patch(target_patch_point_idx, img)
@@ -330,14 +331,15 @@ def main():
         # source_patches.append(source_patch)
         fill_imagedata(img[target_patch_point_idx[0]][target_patch_point_idx[1]], source_patch)
         # update_confidence(img)
-        img_output, img_confidence, img_data, img_gradient = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
-        cv2.imwrite(f"./result_fixcontour/result8_iter{iter}.png", img_output)
-        cv2.imwrite(f"./result_fixcontour/confidence8_iter{iter}.png", img_confidence)
-        cv2.imwrite(f"./result_fixcontour/data8_iter{iter}.png", img_data)
-        cv2.imwrite(f"./result_fixcontour/gradient8_iter{iter}.png", img_gradient)
+        # img_output, img_confidence, img_data, img_gradient = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
+        img_output = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
+        cv2.imwrite(f"./result_new/result8_patchsize9/iter{iter}.png", img_output)
+        # cv2.imwrite(f"./result_fixcontour/confidence8_iter{iter}.png", img_confidence)
+        # cv2.imwrite(f"./result_fixcontour/data8_iter{iter}.png", img_data)
+        # cv2.imwrite(f"./result_fixcontour/gradient8_iter{iter}.png", img_gradient)
         update_contour_point(img)
         iter += 1
-    # img_output = generate_result_image(img)
+    img_output = generate_result_image(img)
     
     # cv2.imwrite(args.output, img_output)
 
