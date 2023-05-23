@@ -164,6 +164,8 @@ def compute_difference(target_patch, source_patch):
     
     for i in range(target_patch.shape[0]):
         for j in range(target_patch.shape[1]):
+            # if source_patch[i, j].r == target_patch[i, j].r and source_patch[i, j].c == target_patch[i, j].c:
+            #     return max_difference
             if not source_patch[i, j].is_filled:
                 return max_difference
             
