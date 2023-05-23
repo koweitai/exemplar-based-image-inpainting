@@ -293,8 +293,8 @@ def generate_result_image_test(img_input, img, point_idx, source_patch): # å–®ç´
     # return img_result, img_confidence, img_data, img_gradient
     return img_result
     
-def generate_result_image(img):
-    img_result = np.zeros(img.shape, dtype=np.uint8)
+def generate_result_image(img_input, img):
+    img_result = np.zeros(img_input.shape, dtype=np.uint8)
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
             img_result[i][j] = img[i][j].value
