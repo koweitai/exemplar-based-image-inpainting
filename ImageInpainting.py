@@ -47,7 +47,7 @@ class Pixel:
     def compute_patch_priority(self):
         return self.compute_confidence() * self.compute_data()
     
-    def gradient_vector(self, k = 2): # per pixel (Sobel)
+    def gradient_vector_old(self, k = 2): # per pixel (Sobel)
         max_gradient = -1
         for i in range(self.patch.shape[0]):
             for j in range(self.patch.shape[1]):
@@ -66,6 +66,43 @@ class Pixel:
                 if gradient > max_gradient:
                     max_gradient = gradient
                     max_gradient_vec = np.array([gc_sum, gr_sum])
+        magnitude = np.sqrt(max_gradient_vec.dot(max_gradient_vec))
+        # gradient_vec = max_gradient_vec / magnitude * max_gradient # normalize?
+        gradient_vec = max_gradient_vec
+        self.gradient = magnitude
+        return gradient_vec
+    
+    def gradient_vector(self, k = 2): # per pixel (Sobel)
+        values = [np.empty(self.patch.shape) for _ in range(3)]
+        for i in range(self.patch.shape[0]):
+            for j in range(self.patch.shape[1]):
+                for channel in range(3):
+                    if self.patch[i][j].is_filled:
+                        values[channel][i][j] = self.patch[i][j].value[channel]
+                    else:
+                        values[channel][i][j] = np.nan
+
+        gr = []
+        gc = []
+        for channel in range(3):
+            gr_here, gc_here = np.gradient(values[channel], axis=(0, 1))
+            gr.append(gr_here)
+            gc.append(gc_here)
+        gr_sum = sum(gr) / 3
+        gc_sum = sum(gc) / 3
+
+        max_gradient = -1
+        max_gradient_vec = np.array([0, 0])
+        for i in range(gr_sum.shape[0]):
+            for j in range(gr_sum.shape[1]):
+                if not (np.isnan(gr_sum[i, j])) and not (np.isnan(gc_sum[i, j])):
+                    gradient = np.sqrt(gr_sum[i, j]**2 + gc_sum[i, j]**2)
+                else:
+                    gradient = -1
+                
+                if gradient > max_gradient:
+                    max_gradient = gradient
+                    max_gradient_vec = np.array([gc_sum[i, j], gr_sum[i, j]])
         magnitude = np.sqrt(max_gradient_vec.dot(max_gradient_vec))
         # gradient_vec = max_gradient_vec / magnitude * max_gradient # normalize?
         gradient_vec = max_gradient_vec
@@ -193,7 +230,7 @@ def find_source_patch(target_patch_point_idx, img):
 def fill_imagedata(target_patch_pixel, source_patch):
     # update confidence here?
     target_patch_pixel.confidence = target_patch_pixel.compute_confidence()
-    print(target_patch_pixel.confidence)
+    # print(target_patch_pixel.confidence, target_patch_pixel.gradient, target_patch_pixel.data)
     for i in range(source_patch.shape[0]):
         for j in range(source_patch.shape[1]):
             if not target_patch_pixel.patch[i][j].is_filled:
