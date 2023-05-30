@@ -210,7 +210,7 @@ def compute_difference(target_patch, source_patch):
             else:
                 if target_patch[i, j].is_filled: # 只看 target_patch 有填的點
                     p1, p2 = target_patch[i, j].value, source_patch[i, j].value # p1, p2 = [B, G, R], [B, G, R]
-                    difference += (((p1-p2)**2)//1000).sum()
+                    difference += (abs(p1-p2)).sum()
 
     return difference
 
@@ -338,7 +338,7 @@ def main():
         # cv2.imwrite(f"./result_fixcontour/data8_iter{iter}.png", img_data)
         # cv2.imwrite(f"./result_fixcontour/gradient8_iter{iter}.png", img_gradient)
         if iter % 4 == 0:
-            cv2.imwrite(f"./result/test/result8-1_iter{iter}.png", img_output)
+            cv2.imwrite(f"./result/test/result8_iter{iter}.png", img_output)
         update_contour_point(img)
         iter += 1
     img_output = generate_result_image(img_input, img)
