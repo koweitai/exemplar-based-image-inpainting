@@ -121,7 +121,8 @@ class Pixel:
             if point == cur_point:
                 continue
             dist = (point[0]-cur_point[0])**2 + (point[1]-cur_point[1])**2
-            if dist >= 2 and dist <= 5:
+            # if dist <= 2:
+            if dist <= 3:
                 if prev_point == [-1, -1]:
                     prev_point = point
                 elif next_point == [-1, -1]:
@@ -209,7 +210,7 @@ def compute_difference(target_patch, source_patch):
             else:
                 if target_patch[i, j].is_filled: # 只看 target_patch 有填的點
                     p1, p2 = target_patch[i, j].value, source_patch[i, j].value # p1, p2 = [B, G, R], [B, G, R]
-                    difference += ((p1-p2)**2).sum()
+                    difference += (((p1-p2)**2)//1000).sum()
 
     return difference
 
@@ -331,17 +332,18 @@ def main():
         # source_patches.append(source_patch)
         fill_imagedata(img[target_patch_point_idx[0]][target_patch_point_idx[1]], source_patch)
         # update_confidence(img)
-        # img_output, img_confidence, img_data, img_gradient = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
-        img_output = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
-        cv2.imwrite(f"./result_new/result8_patchsize9/iter{iter}.png", img_output)
+        img_output, img_confidence, img_data, img_gradient = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
+        # cv2.imwrite(f"./result_fixcontour/result8_iter{iter}.png", img_output)
         # cv2.imwrite(f"./result_fixcontour/confidence8_iter{iter}.png", img_confidence)
         # cv2.imwrite(f"./result_fixcontour/data8_iter{iter}.png", img_data)
         # cv2.imwrite(f"./result_fixcontour/gradient8_iter{iter}.png", img_gradient)
+        if iter % 4 == 0:
+            cv2.imwrite(f"./result/test/result8-1_iter{iter}.png", img_output)
         update_contour_point(img)
         iter += 1
-    img_output = generate_result_image(img)
+    img_output = generate_result_image(img_input, img)
     
-    # cv2.imwrite(args.output, img_output)
+    cv2.imwrite(args.output, img_output)
 
 if __name__ == "__main__":
     main()
