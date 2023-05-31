@@ -194,7 +194,7 @@ def find_maxpriority_patch(img):
 
 def compute_difference(target_patch, source_patch):
     # target_patch 中會有很多是待填滿的點，在比較的時候是不是只比較已填或不用填的點們去跟 source_patch 比？
-    # 確保 source_patch 裡面每個點都是有顏色的（填滿的
+    # 確保 source_patch 裡面每個點都是有顏色的（填滿的 -> 只要target_patch沒有被填的點，source_patch都已經被填滿
     min_SSIM = -1 # if source_patch 不是填滿的
 
     if source_patch.shape != target_patch.shape:
@@ -204,13 +204,13 @@ def compute_difference(target_patch, source_patch):
     img_source = np.zeros([patch_size, patch_size, 3], dtype=np.uint8)
     for i in range(target_patch.shape[0]):
         for j in range(target_patch.shape[1]):
-            if not source_patch[i, j].is_filled:
-                return min_SSIM
-            
-            else:
-                if target_patch[i, j].is_filled: # 只看 target_patch 有填的點
-                    img_target[i, j] = target_patch[i, j].value # [B, G, R]
-                    img_source[i, j] = source_patch[i, j].value
+            img_source[i, j] = source_patch[i, j].value
+            if target_patch[i, j].is_filled: # 只看 target_patch 有填的點
+                img_target[i, j] = target_patch[i, j].value # [B, G, R]
+            else: # target_patch沒有被填的點，source_patch必須已經被填滿
+                if not source_patch[i, j].is_filled:
+                    return min_SSIM
+                img_target[i, j] = source_patch[i, j].value # 用source_patch的值代替
     ssim_value = ssim(img_target, img_source, multichannel=True, win_size=patch_size, channel_axis=2)
     # print(ssim_value)
     return ssim_value
