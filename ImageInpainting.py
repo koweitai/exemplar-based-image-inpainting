@@ -285,8 +285,11 @@ def generate_result_image_test(img_input, img, point_idx, source_patch): # å–®ç´
                 img_result[i, j] = img[i, j].value
     # for source_patch in source_patches:
     for i in range(source_patch.shape[0]):
-        for j in range(source_patch.shape[1]):
-            img_result[source_patch[i][j].r, source_patch[i][j].c] = [0, 255, 0]
+        img_result[source_patch[i][0].r, source_patch[i][0].c] = [0, 255, 0]
+        img_result[source_patch[i][source_patch.shape[1]-1].r, source_patch[i][source_patch.shape[1]-1].c] = [0, 255, 0]
+    for j in range(source_patch.shape[1]):
+        img_result[source_patch[0][j].r, source_patch[0][j].c] = [0, 255, 0]
+        img_result[source_patch[source_patch.shape[0]-1][j].r, source_patch[source_patch.shape[0]-1][j].c] = [0, 255, 0]
     # print(max_magnitude, max_magnitude_vec)
     # print(max_data, max_data_norm, max_data_gradient)
     # for point_idx in point_idxs:
