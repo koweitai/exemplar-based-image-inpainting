@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import argparse
+from skimage.metrics import structural_similarity as ssim
 
 alpha = 255 # normalization factor
 
@@ -194,39 +195,39 @@ def find_maxpriority_patch(img):
 def compute_difference(target_patch, source_patch):
     # target_patch 中會有很多是待填滿的點，在比較的時候是不是只比較已填或不用填的點們去跟 source_patch 比？
     # 確保 source_patch 裡面每個點都是有顏色的（填滿的
-    max_difference = 17500000 # if source_patch 不是填滿的
-    difference = 0
+    min_SSIM = -1 # if source_patch 不是填滿的
 
     if source_patch.shape != target_patch.shape:
-        return max_difference
+        return min_SSIM
     
+    img_target = np.zeros([patch_size, patch_size, 3], dtype=np.uint8)
+    img_source = np.zeros([patch_size, patch_size, 3], dtype=np.uint8)
     for i in range(target_patch.shape[0]):
         for j in range(target_patch.shape[1]):
-            # if source_patch[i, j].r == target_patch[i, j].r and source_patch[i, j].c == target_patch[i, j].c:
-            #     return max_difference
             if not source_patch[i, j].is_filled:
-                return max_difference
+                return min_SSIM
             
             else:
                 if target_patch[i, j].is_filled: # 只看 target_patch 有填的點
-                    p1, p2 = target_patch[i, j].value, source_patch[i, j].value # p1, p2 = [B, G, R], [B, G, R]
-                    difference += (abs(p1-p2)).sum()
-
-    return difference
+                    img_target[i, j] = target_patch[i, j].value # [B, G, R]
+                    img_source[i, j] = source_patch[i, j].value
+    ssim_value = ssim(img_target, img_source, multichannel=True, win_size=patch_size, channel_axis=2)
+    # print(ssim_value)
+    return ssim_value
 
 def find_source_patch(target_patch_point_idx, img):
     target_patch = img[target_patch_point_idx[0], target_patch_point_idx[1]].patch
-    min_difference = 17500000
-    min_difference_patch = target_patch
+    max_SSIM = -1
+    max_SSIM_patch = target_patch
     for row in img:
         for ele in row: # ele is a Pixel
             source_patch = ele.patch
             difference = compute_difference(target_patch, source_patch)
-            if  difference < min_difference:
-                min_difference_patch = source_patch
-                min_difference = difference
+            if  difference > max_SSIM:
+                max_SSIM_patch = source_patch
+                max_SSIM = difference
 
-    return min_difference_patch
+    return max_SSIM_patch
 
 def fill_imagedata(target_patch_pixel, source_patch):
     # update confidence here?
@@ -332,13 +333,13 @@ def main():
         # source_patches.append(source_patch)
         fill_imagedata(img[target_patch_point_idx[0]][target_patch_point_idx[1]], source_patch)
         # update_confidence(img)
-        img_output, img_confidence, img_data, img_gradient = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
+        # img_output, img_confidence, img_data, img_gradient = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
+        img_output = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
         # cv2.imwrite(f"./result_fixcontour/result8_iter{iter}.png", img_output)
         # cv2.imwrite(f"./result_fixcontour/confidence8_iter{iter}.png", img_confidence)
         # cv2.imwrite(f"./result_fixcontour/data8_iter{iter}.png", img_data)
         # cv2.imwrite(f"./result_fixcontour/gradient8_iter{iter}.png", img_gradient)
-        if iter % 4 == 0:
-            cv2.imwrite(f"./result/test/result8_iter{iter}.png", img_output)
+        cv2.imwrite(f"./result/test1/result8_iter{iter}.png", img_output)
         update_contour_point(img)
         iter += 1
     img_output = generate_result_image(img_input, img)
