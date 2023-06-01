@@ -342,7 +342,7 @@ def main():
         # cv2.imwrite(f"./result_fixcontour/confidence8_iter{iter}.png", img_confidence)
         # cv2.imwrite(f"./result_fixcontour/data8_iter{iter}.png", img_data)
         # cv2.imwrite(f"./result_fixcontour/gradient8_iter{iter}.png", img_gradient)
-        cv2.imwrite(f"./result/test1/result8_iter{iter}.png", img_output)
+        cv2.imwrite(f"./result/test2/result10_iter{iter}.png", img_output)
         update_contour_point(img)
         iter += 1
     img_output = generate_result_image(img_input, img)
