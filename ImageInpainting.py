@@ -28,11 +28,7 @@ class Pixel:
 
     def compute_confidence(self):
         """ Compute confidence of the central pixel of the patch. """
-        confidence_sum = 0
-        for row in self.patch:
-            for ele in row:
-                if ele.is_filled:
-                    confidence_sum += ele.confidence
+        confidence_sum = sum([ele.confidence for row in self.patch for ele in row if ele.is_filled])
         confidence = confidence_sum / (self.patch.shape[0]*self.patch.shape[1]) # 面積應該是self.patch.shape[0]*self.patch.shape[1]?
         # print(f"[{self.r}, {self.c}]'s confidence: {self.confidence}")    
         return confidence
@@ -147,10 +143,7 @@ class Pixel:
     '''
 
     def normal_direction(self, printValue = False):
-        for point in contour_point:
-            if point == [self.r, self.c]:
-                cur_point = point
-                break
+        cur_point = next((point for point in contour_point if point == [self.r, self.c]), None)
         
         prev_point = [-1, -1]
         next_point = [-1, -1]
@@ -158,8 +151,8 @@ class Pixel:
             if point == cur_point:
                 continue
             dist = (point[0]-cur_point[0])**2 + (point[1]-cur_point[1])**2
+            if dist <=4 and dist >= 3:
             # if dist <= 2:
-            if dist <= 3:
                 if prev_point == [-1, -1]:
                     prev_point = point
                 elif next_point == [-1, -1]:
@@ -184,11 +177,7 @@ def is_contour(pixel):
 
 # Method fuction
 def init_mask(mask_img):
-    output_image = np.ones_like(mask_img)
-    for i in range(mask_img.shape[0]):
-        for j in range(mask_img.shape[1]):
-            output_image[i, j] = 0 if mask_img[i, j] < 128 else 255
-    return output_image
+    return np.where(mask_img < 128, 0, 255)
 
 def init_image(img_input, img_mask):
     img = np.empty(shape=img_input.shape[0:2], dtype = np.dtype(Pixel))
@@ -196,7 +185,7 @@ def init_image(img_input, img_mask):
     contour_point = []
     for i in range(img_mask.shape[0]):
         for j in range(img_mask.shape[1]): 
-            pixel = Pixel(i, j, img_input[i][j] if img_mask[i][j] == 0 else [0, 0, 0], img_mask[i][j] == 0) 
+            pixel = Pixel(i, j, img_input[i][j], img_mask[i][j] == 0) 
             img[i][j] = pixel
 
     for i in range(img_mask.shape[0]):
@@ -218,21 +207,9 @@ def init_image(img_input, img_mask):
     return img
 
 def find_maxpriority_patch(img):
-    max_priority = -100
-    max_priority_point_idx = contour_point[0]
-    for idx in contour_point: # idx = [i, j]
-        point = img[idx[0], idx[1]] # point is a Pixel
-        pri = point.compute_patch_priority()
-        if pri > max_priority:
-            # print(f'{idx}: {pri}') 
-            max_priority = pri
-            max_priority_point_idx = idx
-
-    return max_priority_point_idx
+    return max(contour_point, key=lambda idx: img[idx[0], idx[1]].compute_patch_priority()) # max_priority_point_idx
 
 def compute_difference(target_patch, source_patch):
-    # target_patch 中會有很多是待填滿的點，在比較的時候是不是只比較已填或不用填的點們去跟 source_patch 比？
-    # 確保 source_patch 裡面每個點都是有顏色的（填滿的 -> 只要target_patch沒有被填的點，source_patch都已經被填滿
     min_SSIM = -1 # if source_patch 不是填滿的
 
     if source_patch.shape != target_patch.shape:
