@@ -4,6 +4,63 @@ import argparse
 from skimage.metrics import structural_similarity as ssim
 
 alpha = 255 # normalization factor
+block_types = [[[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+                [[0, 0, 1], [0, 1, 0], [1, 0, 0]],
+                [[0, 1, 0], [0, 1, 0], [0, 1, 0]],
+                [[0, 0, 0], [1, 1, 1], [0, 0, 0]],
+                [[0, 1, 0], [0, 1, 0], [1, 0, 0]],
+                [[0, 1, 0], [0, 1, 0], [0, 0, 1]],
+                [[0, 0, 0], [1, 1, 0], [0, 1, 0]],
+                [[0, 0, 0], [0, 1, 1], [0, 1, 0]],
+                [[0, 1, 0], [0, 1, 0], [1, 0, 0]],
+                [[0, 1, 0], [0, 1, 0], [0, 0, 1]],
+                [[1, 0, 0], [0, 1, 0], [0, 1, 0]],
+                [[0, 0, 1], [0, 1, 0], [0, 1, 0]],
+                [[0, 0, 1], [1, 1, 0], [0, 0, 0]],
+                [[0, 0, 0], [1, 1, 0], [0, 0, 1]],
+                [[1, 0, 0], [0, 1, 1], [0, 0, 0]],
+                [[0, 0, 0], [0, 1, 1], [1, 0, 0]],
+                [[1, 1, 0], [0, 1, 0], [0, 0, 0]],
+                [[0, 1, 1], [0, 1, 0], [0, 0, 0]],
+                [[0, 0, 0], [0, 1, 0], [1, 1, 0]],
+                [[0, 0, 0], [0, 1, 0], [0, 1, 1]],
+                [[1, 0, 0], [1, 1, 0], [0, 0, 0]],
+                [[0, 0, 0], [1, 1, 0], [1, 0, 0]],
+                [[0, 0, 1], [0, 1, 1], [0, 0, 0]],
+                [[0, 0, 0], [0, 1, 1], [0, 0, 1]],
+                [[1, 0, 1], [0, 1, 0], [0, 0, 0]],
+                [[0, 0, 0], [0, 1, 0], [1, 0, 1]],
+                [[1, 0, 0], [0, 1, 0], [1, 0, 0]],
+                [[0, 0, 1], [0, 1, 0], [0, 0, 1]]]
+normal_types = [np.array([180.3122292, -180.3122292]),
+                np.array([180.3122292, 180.3122292]),
+                np.array([0., 255.]),
+                np.array([255., 0.]),
+                np.array([-114.03946685, -228.0789337]),
+                np.array([114.03946685, -228.0789337]),
+                np.array([180.3122292, -180.3122292]),
+                np.array([-180.3122292, -180.3122292]),
+                np.array([-114.03946685, -228.0789337]),
+                np.array([114.03946685, -228.0789337]),
+                np.array([114.03946685, -228.0789337]),
+                np.array([-114.03946685, -228.0789337]),
+                np.array([-228.0789337 ,-114.03946685]),
+                np.array([228.0789337 ,-114.03946685]),
+                np.array([228.0789337 ,-114.03946685]),
+                np.array([-255., 0.]),
+                np.array([255., 0.]),
+                np.array([255., 0.]),
+                np.array([255., 0.]),
+                np.array([255., 0.]),
+                np.array([0., -255.]),
+                np.array([0., -255.]),
+                np.array([0., -255.]),
+                np.array([0., -255.]),
+                np.array([255., 0.]),
+                np.array([255., 0.]),
+                np.array([0., -255.]),
+                np.array([0., -255.])
+                ]
 
 class Pixel:
     def __init__(self, r, c, value, is_filled):
@@ -12,6 +69,7 @@ class Pixel:
         self.value = value # [B, G, R]
         self.confidence = 1 if is_filled else 0
         self.is_filled = is_filled # filled or not
+        self.is_contour = 0
         self.data = 0
         self.gradient = 0
 
@@ -136,7 +194,7 @@ class Pixel:
         return gradient_vec
     '''
 
-    def normal_direction(self, printValue = False):
+    def normal_direction_old(self, printValue = False):
         cur_point = next((point for point in contour_point if point == [self.r, self.c]), None)
         
         prev_point = [-1, -1]
@@ -165,6 +223,20 @@ class Pixel:
             return normal, prev_point, next_point
         else:
             return normal
+    
+    def normal_direction(self, printValue = False):
+        block = [[self.neighbors[i][j].is_contour for j in range(3)] for i in range(3)]
+        
+        type = -1
+        for i in range(len(block_types)):
+            if np.array_equal(np.logical_and(block_types[i], block), block_types[i]):
+                type = i
+                break
+        normal = normal_types[type]
+        if printValue:
+            print(f"this patch's normal: {normal}")
+        
+        return normal
 
 # Tool function
 def is_contour(pixel):
@@ -278,12 +350,18 @@ def fill_imagedata(target_patch_pixel, source_patch):
 
 def update_contour_point(img):
     contour_point.clear()
-    contour_point.extend([[i, j] for i in range(shape[0]) for j in range(shape[1]) if not img[i][j].is_filled and is_contour(img[i][j]) and [i, j] not in contour_point])
+    for i in range(shape[0]):
+        for j in range(shape[1]):
+            if (not img[i][j].is_filled) and is_contour(img[i][j]) and ([i, j] not in contour_point):
+                img[i][j].is_contour = 1
+                contour_point.append([i, j])
+            else:
+                img[i][j].is_contour = 0
     return
 
 def generate_result_image_test(img_input, img, point_idx, source_patch): # 單純測試有沒有找到欲填範圍的邊緣
     _ = img[point_idx[0], point_idx[1]].gradient_vector(2, True)
-    _, prev_point, next_point = img[point_idx[0], point_idx[1]].normal_direction(True)
+    _ = img[point_idx[0], point_idx[1]].normal_direction(True)
     
     img_result = np.zeros(img_input.shape, dtype=np.uint8)
     # img_confidence = np.zeros(img_input.shape[:-1], dtype=np.uint8)
@@ -295,8 +373,8 @@ def generate_result_image_test(img_input, img, point_idx, source_patch): # 單�
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
             # img_confidence[i, j] = int(img[i, j].confidence * 255)
-            # img_data[i, j] = np.clip(img[i, j].data, 0, 255)
-            # img_gradient[i, j] = np.clip(img[i, j].gradient, 0, 255)
+            # img_data[i, j] = 0 if img[i, j].is_filled else np.clip(img[i, j].data, 0, 255)
+            # img_gradient[i, j] = 0 if img[i, j].is_filled else np.clip(img[i, j].gradient, 0, 255)
             if [i, j] in contour_point:
                 img_result[i, j] = [255, 0, 0]
                 # norm = img[i][j].normal_direction()
@@ -326,8 +404,8 @@ def generate_result_image_test(img_input, img, point_idx, source_patch): # 單�
     # print(max_data, max_data_norm, max_data_gradient)
     # for point_idx in point_idxs:
     img_result[point_idx[0], point_idx[1]] = [0, 0, 255]
-    img_result[prev_point[0], prev_point[1]] = [0, 255, 0]
-    img_result[next_point[0], next_point[1]] = [0, 255, 0]
+    # img_result[prev_point[0], prev_point[1]] = [0, 255, 0]
+    # img_result[next_point[0], next_point[1]] = [0, 255, 0]
     # max_data會到 265.30946553035, norm=[114.03946685 228.0789337 ], gradient=[111.75 240.75]，超過255是正常的嗎？
     # return img_result, img_confidence, img_data, img_gradient
     return img_result
@@ -366,7 +444,10 @@ def main():
 
         # img_output, img_confidence, img_data, img_gradient = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
         img_output = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
-        cv2.imwrite(f"./result/result9/result9_iter{iter}.png", img_output)
+        cv2.imwrite(f"./result/result4_test/result10_iter{iter}.png", img_output)
+        # cv2.imwrite(f"./result/test4/confidence10_iter{iter}.png", img_confidence)
+        # cv2.imwrite(f"./result/test4/data10_iter{iter}.png", img_data)
+        # cv2.imwrite(f"./result/test4/gradient10_iter{iter}.png", img_gradient)
         update_contour_point(img)
         iter += 1
     img_output = generate_result_image(img_input, img)
