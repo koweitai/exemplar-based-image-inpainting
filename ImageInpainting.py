@@ -242,21 +242,10 @@ def compute_difference(target_patch, source_patch):
     img_source = np.zeros([patch_size, patch_size, 3], dtype=np.uint8)
     for i in range(target_patch.shape[0]):
         for j in range(target_patch.shape[1]):
-            if not source_patch[i, j].is_filled:
-                return min_SSIM
-            else:
-                if target_patch[i, j].is_filled: # 只看 target_patch 有填的點
-                     img_target[i, j] = target_patch[i, j].value # [B, G, R]
-                     img_source[i, j] = source_patch[i, j].value
-            '''
-            img_source[i, j] = source_patch[i, j].value
-            if target_patch[i, j].is_filled: # 只看 target_patch 有填的點
+            # img_source[i, j] = source_patch[i, j].value
+            if target_patch[i, j].is_filled and source_patch[i, j].is_filled: # 只看 target_patch 有填的點
                 img_target[i, j] = target_patch[i, j].value # [B, G, R]
-            else: # target_patch沒有被填的點，source_patch必須已經被填滿
-                if not source_patch[i, j].is_filled:
-                    return min_SSIM
-                img_target[i, j] = source_patch[i, j].value # 用source_patch的值代替
-            '''
+                img_source[i, j] = source_patch[i, j].value # [B, G, R]
     ssim_value = ssim(img_target, img_source, multichannel=True, win_size=patch_size, channel_axis=2)
     # print(ssim_value)
     return ssim_value
@@ -281,7 +270,7 @@ def fill_imagedata(target_patch_pixel, source_patch):
     # print(target_patch_pixel.confidence, target_patch_pixel.gradient, target_patch_pixel.data)
     for i in range(source_patch.shape[0]):
         for j in range(source_patch.shape[1]):
-            if not target_patch_pixel.patch[i][j].is_filled:
+            if (not target_patch_pixel.patch[i][j].is_filled) and source_patch[i][j].is_filled:
                 target_patch_pixel.patch[i][j].value = source_patch[i][j].value
                 target_patch_pixel.patch[i][j].is_filled = True
                 target_patch_pixel.patch[i][j].confidence = target_patch_pixel.confidence
