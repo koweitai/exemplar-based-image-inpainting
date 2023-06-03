@@ -151,8 +151,8 @@ class Pixel:
             if point == cur_point:
                 continue
             dist = (point[0]-cur_point[0])**2 + (point[1]-cur_point[1])**2
-            if dist <=4 and dist >= 3:
             # if dist <= 2:
+            if dist <=3 and dist >= 1:
                 if prev_point == [-1, -1]:
                     prev_point = point
                 elif next_point == [-1, -1]:
@@ -218,24 +218,44 @@ def compute_difference(target_patch, source_patch):
     img_target = np.zeros([patch_size, patch_size, 3], dtype=np.uint8)
     img_source = np.zeros([patch_size, patch_size, 3], dtype=np.uint8)
 
-    # 只看 target_patch 有填的點
+    # source_patch 要是滿的，再看 target_patch 有填的點
     for i in range(target_patch.shape[0]):
         for j in range(target_patch.shape[1]):
-            # img_source[i, j] = source_patch[i, j].value
-            if target_patch[i, j].is_filled and source_patch[i, j].is_filled: 
-                img_target[i, j] = target_patch[i, j].value # [B, G, R]
-                img_source[i, j] = source_patch[i, j].value # [B, G, R]
-
-    # source_patch 要是滿的，再看 target_patch 有填的點
-    # for i in range(target_patch.shape[0]):
-    #     for j in range(target_patch.shape[1]):
-    #         if not source_patch[i, j].is_filled:
-    #             return min_SSIM
-    #         img_source[i, j] = source_patch[i, j].value
-    #         img_target[i, j] = target_patch[i, j].value if target_patch[i, j].is_filled else source_patch[i, j].value
+            if not source_patch[i, j].is_filled:
+                return min_SSIM
+            img_source[i, j] = source_patch[i, j].value
+            img_target[i, j] = target_patch[i, j].value if target_patch[i, j].is_filled else source_patch[i, j].value
     ssim_value = ssim(img_target, img_source, multichannel=True, win_size=patch_size, channel_axis=2)
 
     return ssim_value
+
+def compute_difference_square(target_patch, source_patch, print_val=False):
+    max_diff = float('inf') # if source_patch 不是填滿的
+
+    if source_patch.shape != target_patch.shape:
+        return max_diff
+
+    # source_patch 要是滿的，再看 target_patch 有填的點
+    diff = 0
+    for i in range(target_patch.shape[0]):
+        for j in range(target_patch.shape[1]):
+            if not source_patch[i, j].is_filled:
+                return max_diff
+            if target_patch[i, j].is_filled:
+                if print_val:
+                    print(source_patch[i, j].value, target_patch[i, j].value)
+                diff_here = np.array(source_patch[i, j].value.astype(np.uint32) - target_patch[i, j].value.astype(np.uint32))
+                if print_val:
+                    print(diff_here)
+                diff_here = np.square(diff_here)
+                if print_val:
+                    print(diff_here)
+                diff += np.sqrt(diff_here.sum())
+                if print_val:
+                    print(diff_here)
+                    print(diff)
+
+    return diff
 
 def find_source_patch(target_patch_point_idx, img):
     target_patch = img[target_patch_point_idx[0], target_patch_point_idx[1]].patch
@@ -250,6 +270,20 @@ def find_source_patch(target_patch_point_idx, img):
                 max_SSIM = difference
 
     return max_SSIM_patch
+
+def find_source_patch_square(target_patch_point_idx, img):
+    target_patch = img[target_patch_point_idx[0], target_patch_point_idx[1]].patch
+    min_diff = float('inf')
+    min_diff_patch = target_patch
+    for ele in img.flatten(): # ele is a Pixel
+        if not (ele.r == target_patch_point_idx[0] and ele.c == target_patch_point_idx[1]):
+            source_patch = ele.patch
+            difference = compute_difference(target_patch, source_patch)
+            if  difference < min_diff:
+                min_diff_patch = source_patch
+                min_diff = difference
+
+    return min_diff_patch
 
 def fill_imagedata(target_patch_pixel, source_patch):
     target_patch_pixel.confidence = target_patch_pixel.compute_confidence()
@@ -354,7 +388,7 @@ def main():
         # cv2.imwrite(f"./result/test4/confidence10_iter{iter}.png", img_confidence)
         # cv2.imwrite(f"./result/test4/data10_iter{iter}.png", img_data)
         # cv2.imwrite(f"./result/test4/gradient10_iter{iter}.png", img_gradient)
-        # cv2.imwrite(f"./result/test4/result10_iter{iter}.png", img_output)
+        cv2.imwrite(f"./result/test4/result10_iter{iter}.png", img_output)
         update_contour_point(img)
         iter += 1
     img_output = generate_result_image(img_input, img)
