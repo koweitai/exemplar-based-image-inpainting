@@ -73,8 +73,9 @@ class Pixel:
         self.gradient = magnitude
         return gradient_vec
     
-    def gradient_vector(self, k = 2): # per pixel (Sobel)
+    def gradient_vector(self, k = 2, printValue = False): # per pixel (Sobel)
         values = [np.empty(self.patch.shape) for _ in range(3)]
+        
         for i in range(self.patch.shape[0]):
             for j in range(self.patch.shape[1]):
                 for channel in range(3):
@@ -91,7 +92,6 @@ class Pixel:
             gc.append(gc_here)
         gr_sum = sum(gr) / 3
         gc_sum = sum(gc) / 3
-
         max_gradient = -1
         max_gradient_vec = np.array([0, 0])
         for i in range(gr_sum.shape[0]):
@@ -108,9 +108,11 @@ class Pixel:
         # gradient_vec = max_gradient_vec / magnitude * max_gradient # normalize?
         gradient_vec = max_gradient_vec
         self.gradient = magnitude
+        if printValue:
+            print(f"this patch's gradient: {gradient_vec}")
         return gradient_vec
     
-    def normal_direction(self):
+    def normal_direction(self, printValue = False):
         for point in contour_point:
             if point == [self.r, self.c]:
                 cur_point = point
@@ -132,6 +134,8 @@ class Pixel:
         normal = np.array([prev_point[1]-next_point[1], prev_point[0]-next_point[0]])
         magnitude = np.sqrt(normal.dot(normal))
         normal = normal / magnitude * alpha  # normalize?
+        if printValue:
+            print(f"this patch's normal: {normal}")
         return normal
 
 # Tool function
@@ -331,11 +335,12 @@ def main():
     while len(contour_point) != 0:
         print("iter", iter)
         target_patch_point_idx = find_maxpriority_patch(img)
+        _ = img[target_patch_point_idx[0], target_patch_point_idx[1]].gradient_vector(2, True)
+        _ = img[target_patch_point_idx[0], target_patch_point_idx[1]].normal_direction(True)
+
         source_patch = find_source_patch(target_patch_point_idx, img)
-        # target_patch_point_idxs.append(target_patch_point_idx)
-        # source_patches.append(source_patch)
         fill_imagedata(img[target_patch_point_idx[0]][target_patch_point_idx[1]], source_patch)
-        # update_confidence(img)
+
         # img_output, img_confidence, img_data, img_gradient = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
         img_output = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
         # cv2.imwrite(f"./result_fixcontour/result8_iter{iter}.png", img_output)
