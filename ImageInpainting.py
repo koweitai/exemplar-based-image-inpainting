@@ -217,22 +217,32 @@ def compute_difference(target_patch, source_patch):
     
     img_target = np.zeros([patch_size, patch_size, 3], dtype=np.uint8)
     img_source = np.zeros([patch_size, patch_size, 3], dtype=np.uint8)
+
+    # 只看 target_patch 有填的點
     for i in range(target_patch.shape[0]):
         for j in range(target_patch.shape[1]):
             # img_source[i, j] = source_patch[i, j].value
-            if target_patch[i, j].is_filled and source_patch[i, j].is_filled: # 只看 target_patch 有填的點
+            if target_patch[i, j].is_filled and source_patch[i, j].is_filled: 
                 img_target[i, j] = target_patch[i, j].value # [B, G, R]
                 img_source[i, j] = source_patch[i, j].value # [B, G, R]
+
+    # source_patch 要是滿的，再看 target_patch 有填的點
+    # for i in range(target_patch.shape[0]):
+    #     for j in range(target_patch.shape[1]):
+    #         if not source_patch[i, j].is_filled:
+    #             return min_SSIM
+    #         img_source[i, j] = source_patch[i, j].value
+    #         img_target[i, j] = target_patch[i, j].value if target_patch[i, j].is_filled else source_patch[i, j].value
     ssim_value = ssim(img_target, img_source, multichannel=True, win_size=patch_size, channel_axis=2)
-    # print(ssim_value)
+
     return ssim_value
 
 def find_source_patch(target_patch_point_idx, img):
     target_patch = img[target_patch_point_idx[0], target_patch_point_idx[1]].patch
     max_SSIM = -1
     max_SSIM_patch = target_patch
-    for row in img:
-        for ele in row: # ele is a Pixel
+    for ele in img.flatten(): # ele is a Pixel
+        if not (ele.r == target_patch_point_idx[0] and ele.c == target_patch_point_idx[1]):
             source_patch = ele.patch
             difference = compute_difference(target_patch, source_patch)
             if  difference > max_SSIM:
@@ -242,7 +252,6 @@ def find_source_patch(target_patch_point_idx, img):
     return max_SSIM_patch
 
 def fill_imagedata(target_patch_pixel, source_patch):
-    # update confidence here?
     target_patch_pixel.confidence = target_patch_pixel.compute_confidence()
     # print(target_patch_pixel.confidence, target_patch_pixel.gradient, target_patch_pixel.data)
     for i in range(source_patch.shape[0]):
@@ -254,14 +263,8 @@ def fill_imagedata(target_patch_pixel, source_patch):
     return
 
 def update_contour_point(img):
-    # 為了算邊緣線上點的法向量，找所有邊緣曲線的點放進 contour_point，而且要 contour_point 裏的順序是連著線的
-    # 要處理很多個區塊要補的狀況！！！
-    # 要處理填滿隙縫的問題！
     contour_point.clear()
-    for i in range(shape[0]):
-        for j in range(shape[1]): 
-            if not img[i][j].is_filled and is_contour(img[i][j]) and [i, j] not in contour_point:
-                contour_point.append([i, j])
+    contour_point.extend([[i, j] for i in range(shape[0]) for j in range(shape[1]) if not img[i][j].is_filled and is_contour(img[i][j]) and [i, j] not in contour_point])
     return
 
 def generate_result_image_test(img_input, img, point_idx, source_patch): # 單純測試有沒有找到欲填範圍的邊緣
@@ -333,10 +336,6 @@ def main():
     global shape
     shape = img_input.shape
     img = init_image(img_input, img_mask)
-
-    # target_patch_point_idx = find_maxpriority_patch(img)
-    # source_patch = find_source_patch(target_patch_point_idx, img)
-    # fill_imagedata(img[target_patch_point_idx[0]][target_patch_point_idx[1]], source_patch)
     
     # for iter in range(10):
     iter = 0
@@ -351,7 +350,7 @@ def main():
 
         # img_output, img_confidence, img_data, img_gradient = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
         img_output = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
-        # cv2.imwrite(f"./result_fixcontour/result8_iter{iter}.png", img_output)
+        cv2.imwrite(f"./result/test2/result10_iter{iter}.png", img_output)
         # cv2.imwrite(f"./result/test4/confidence10_iter{iter}.png", img_confidence)
         # cv2.imwrite(f"./result/test4/data10_iter{iter}.png", img_data)
         # cv2.imwrite(f"./result/test4/gradient10_iter{iter}.png", img_gradient)

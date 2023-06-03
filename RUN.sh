@@ -12,17 +12,6 @@ fi
 
 # python3 ImageInpainting.py --input ./dataset/data9/image.png --mask ./dataset/data9/mask.png --output ./result/result9.png --patch_size 7
 # python3 ImageInpainting.py --input ./dataset/data8/image.png --mask ./dataset/data8/mask.png --output ./result/result8.png --patch_size 9
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-python3 ImageInpainting.py --input ./dataset/data10/image.png --mask ./dataset/data10/mask-2.png --output ./result/result10.png --patch_size 5
-=======
-python3 ImageInpainting.py --input ./dataset/data10/image.png --mask ./dataset/data10/mask.png --output ./result/result10.png --patch_size 9
->>>>>>> 4dd3029 (Adjust compute_difference and gradient_vector. Output patch size = 5)
-=======
-python3 ImageInpainting.py --input ./dataset/data10/image.png --mask ./dataset/data10/mask.png --output ./result/result10.png --patch_size 5
->>>>>>> 4d3b642 (Adjust compute_difference and gradient_vector. Output patch size = 5)
-=======
 python3 ImageInpainting.py --input ./dataset/data10/image.png --mask ./dataset/data10/mask-2.png --output ./result/result10.png --patch_size 7
->>>>>>> 24b967b (short the code)
+
 
