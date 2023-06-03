@@ -160,7 +160,6 @@ class Pixel:
         normal = normal / magnitude * alpha  # normalize?
         if printValue:
             print(prev_point, cur_point, next_point)
-            print(normal)
             print(f"this patch's normal: {normal}")
         if printValue:
             return normal, prev_point, next_point
@@ -211,7 +210,7 @@ def init_image(img_input, img_mask):
 def find_maxpriority_patch(img):
     return max(contour_point, key=lambda idx: img[idx[0], idx[1]].compute_patch_priority()) # max_priority_point_idx
 
-def compute_difference_SSIM(target_patch, source_patch):
+def compute_SSIM(target_patch, source_patch):
     min_SSIM = -1 # if source_patch 不是填滿的
 
     if source_patch.shape != target_patch.shape:
@@ -231,7 +230,7 @@ def compute_difference_SSIM(target_patch, source_patch):
 
     return ssim_value
 
-def compute_difference(target_patch, source_patch):
+def compute_sumOfSquare(target_patch, source_patch):
     max_diff = float('inf') # if source_patch 不是填滿的
 
     if source_patch.shape != target_patch.shape:
@@ -247,22 +246,7 @@ def compute_difference(target_patch, source_patch):
                 diff_here = np.array(source_patch[i, j].value.astype(np.uint32) - target_patch[i, j].value.astype(np.uint32))
                 diff_here = np.square(diff_here)
                 diff += np.sqrt(diff_here.sum())
-
     return diff
-
-def find_source_patch_SSIM(target_patch_point_idx, img):
-    target_patch = img[target_patch_point_idx[0], target_patch_point_idx[1]].patch
-    max_SSIM = -1
-    max_SSIM_patch = target_patch
-    for ele in img.flatten(): # ele is a Pixel
-        if not (ele.r == target_patch_point_idx[0] and ele.c == target_patch_point_idx[1]):
-            source_patch = ele.patch
-            difference = compute_difference(target_patch, source_patch)
-            if  difference > max_SSIM:
-                max_SSIM_patch = source_patch
-                max_SSIM = difference
-
-    return max_SSIM_patch
 
 def find_source_patch(target_patch_point_idx, img):
     target_patch = img[target_patch_point_idx[0], target_patch_point_idx[1]].patch
@@ -271,11 +255,15 @@ def find_source_patch(target_patch_point_idx, img):
     for ele in img.flatten(): # ele is a Pixel
         if not (ele.r == target_patch_point_idx[0] and ele.c == target_patch_point_idx[1]):
             source_patch = ele.patch
-            difference = compute_difference(target_patch, source_patch)
+            SSIM_value = (1-compute_SSIM(target_patch, source_patch))*5000
+            sumOfSquare_value = min(500, (compute_sumOfSquare(target_patch, source_patch)))
+            difference = SSIM_value + sumOfSquare_value
             if  difference < min_diff:
                 min_diff_patch = source_patch
                 min_diff = difference
-
+    
+    print(f"(1-SSIM)*5000: {(1-compute_SSIM(target_patch, min_diff_patch))*5000}")
+    print(f"sum of Square: {min(500, (compute_sumOfSquare(target_patch, min_diff_patch)))}")
     return min_diff_patch
 
 def fill_imagedata(target_patch_pixel, source_patch):
@@ -378,10 +366,7 @@ def main():
 
         # img_output, img_confidence, img_data, img_gradient = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
         img_output = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
-        cv2.imwrite(f"./result/data4_test/result10_iter{iter}.png", img_output)
-        # cv2.imwrite(f"./result/test4/confidence10_iter{iter}.png", img_confidence)
-        # cv2.imwrite(f"./result/test4/data10_iter{iter}.png", img_data)
-        # cv2.imwrite(f"./result/test4/gradient10_iter{iter}.png", img_gradient)
+        cv2.imwrite(f"./result/result9/result9_iter{iter}.png", img_output)
         update_contour_point(img)
         iter += 1
     img_output = generate_result_image(img_input, img)
