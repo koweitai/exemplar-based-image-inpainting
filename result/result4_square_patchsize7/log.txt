@@ -1,0 +1,423 @@
+iter 0
+this patch's gradient: [148.33333333   0.        ]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 1
+this patch's gradient: [-62.66666667  81.        ]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 2
+this patch's gradient: [-32.83333333  81.        ]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 3
+this patch's gradient: [157.33333333   1.        ]
+this patch's normal: [-255.    0.]
+iter 4
+this patch's gradient: [145.66666667   3.        ]
+this patch's normal: [-255.    0.]
+iter 5
+this patch's gradient: [ -17.66666667 -110.        ]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 6
+this patch's gradient: [ 80. 103.]
+this patch's normal: [-255.    0.]
+iter 7
+this patch's gradient: [-83.          -0.33333333]
+this patch's normal: [-255.    0.]
+iter 8
+this patch's gradient: [-83.          -0.16666667]
+this patch's normal: [-255.    0.]
+iter 9
+this patch's gradient: [157.33333333   3.        ]
+this patch's normal: [-255.    0.]
+iter 10
+this patch's gradient: [157.33333333   1.        ]
+this patch's normal: [-255.    0.]
+iter 11
+this patch's gradient: [62.66666667  0.83333333]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 12
+this patch's gradient: [-76.   0.]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 13
+this patch's gradient: [-83.           7.16666667]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 14
+this patch's gradient: [62.66666667  0.83333333]
+this patch's normal: [-255.    0.]
+iter 15
+this patch's gradient: [156.33333333  -8.        ]
+this patch's normal: [-255.    0.]
+iter 16
+this patch's gradient: [-94.   8.]
+this patch's normal: [-114.03946685 -228.0789337 ]
+iter 17
+this patch's gradient: [-94.   8.]
+this patch's normal: [-255.    0.]
+iter 18
+this patch's gradient: [-82.           0.33333333]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 19
+this patch's gradient: [157.33333333  -6.33333333]
+this patch's normal: [-255.    0.]
+iter 20
+this patch's gradient: [-83.          14.66666667]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 21
+this patch's gradient: [-55.33333333  -3.66666667]
+this patch's normal: [-255.    0.]
+iter 22
+this patch's gradient: [-94.   8.]
+this patch's normal: [-255.    0.]
+iter 23
+this patch's gradient: [157.33333333   1.        ]
+this patch's normal: [-255.    0.]
+iter 24
+this patch's gradient: [ 20.16666667 -19.66666667]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 25
+this patch's gradient: [35.33333333 -6.33333333]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 26
+this patch's gradient: [ 26.         -13.33333333]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 27
+this patch's gradient: [-83.           0.66666667]
+this patch's normal: [-255.    0.]
+iter 28
+this patch's gradient: [61.66666667  0.33333333]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 29
+this patch's gradient: [-83.           7.16666667]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 30
+this patch's gradient: [15.66666667 16.        ]
+this patch's normal: [-114.03946685 -228.0789337 ]
+iter 31
+this patch's gradient: [ -8.33333333 -14.66666667]
+this patch's normal: [-114.03946685 -228.0789337 ]
+iter 32
+this patch's gradient: [ 10.66666667 -11.        ]
+this patch's normal: [ 114.03946685 -228.0789337 ]
+iter 33
+this patch's gradient: [ 10.         -16.66666667]
+this patch's normal: [   0. -255.]
+iter 34
+this patch's gradient: [ -8.66666667 -10.66666667]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 35
+this patch's gradient: [-94.  18.]
+this patch's normal: [-255.    0.]
+iter 36
+this patch's gradient: [145.66666667   3.        ]
+this patch's normal: [-255.    0.]
+iter 37
+this patch's gradient: [ 11.33333333 -14.        ]
+this patch's normal: [   0. -255.]
+iter 38
+this patch's gradient: [-20.         -11.66666667]
+this patch's normal: [-228.0789337  -114.03946685]
+iter 39
+this patch's gradient: [-83.          -0.16666667]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 40
+this patch's gradient: [119.33333333   1.        ]
+this patch's normal: [-255.    0.]
+iter 41
+this patch's gradient: [119.33333333   1.33333333]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 42
+this patch's gradient: [ 74. -50.]
+this patch's normal: [-255.    0.]
+iter 43
+this patch's gradient: [40.  1.]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 44
+this patch's gradient: [157.33333333   3.        ]
+this patch's normal: [-255.    0.]
+iter 45
+this patch's gradient: [73.  0.]
+this patch's normal: [-255.    0.]
+iter 46
+this patch's gradient: [-0.5        21.33333333]
+this patch's normal: [   0. -255.]
+iter 47
+this patch's gradient: [157.33333333 -10.66666667]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 48
+this patch's gradient: [157.33333333 -10.66666667]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 49
+this patch's gradient: [157.33333333   1.        ]
+this patch's normal: [-255.    0.]
+iter 50
+this patch's gradient: [-83.           7.16666667]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 51
+this patch's gradient: [-14.         -18.66666667]
+this patch's normal: [-114.03946685 -228.0789337 ]
+iter 52
+this patch's gradient: [-11.16666667 -15.16666667]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 53
+this patch's gradient: [13.33333333 26.        ]
+this patch's normal: [   0. -255.]
+iter 54
+this patch's gradient: [ 2. 26.]
+this patch's normal: [   0. -255.]
+iter 55
+this patch's gradient: [103. -32.]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 56
+this patch's gradient: [-22.33333333  -2.5       ]
+this patch's normal: [-255.    0.]
+iter 57
+this patch's gradient: [ 52.66666667 -52.66666667]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 58
+this patch's gradient: [123.33333333 -41.5       ]
+this patch's normal: [-255.    0.]
+iter 59
+this patch's gradient: [123.33333333 -10.66666667]
+this patch's normal: [-255.    0.]
+iter 60
+this patch's gradient: [-25.5        124.66666667]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 61
+this patch's gradient: [-40.66666667 124.66666667]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 62
+this patch's gradient: [-119.    6.]
+this patch's normal: [-255.    0.]
+iter 63
+this patch's gradient: [  3.33333333 -12.        ]
+this patch's normal: [   0. -255.]
+iter 64
+this patch's gradient: [119.  42.]
+this patch's normal: [-255.    0.]
+iter 65
+this patch's gradient: [20.66666667  1.66666667]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 66
+this patch's gradient: [-53.         -92.66666667]
+this patch's normal: [-114.03946685 -228.0789337 ]
+iter 67
+this patch's gradient: [-92.  21.]
+this patch's normal: [-255.    0.]
+iter 68
+this patch's gradient: [21.  -3.5]
+this patch's normal: [-255.    0.]
+iter 69
+this patch's gradient: [ 8.66666667 -3.16666667]
+this patch's normal: [-255.    0.]
+iter 70
+this patch's gradient: [ 8.5        -1.33333333]
+this patch's normal: [237.20913496  93.57791563]
+iter 71
+this patch's gradient: [5.66666667 4.        ]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 72
+this patch's gradient: [5.         7.16666667]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 73
+this patch's gradient: [-2.33333333 11.33333333]
+this patch's normal: [   0. -255.]
+iter 74
+this patch's gradient: [-4.33333333 13.        ]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 75
+this patch's gradient: [-14.33333333   2.        ]
+this patch's normal: [-255.    0.]
+iter 76
+this patch's gradient: [-13.16666667  -6.66666667]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 77
+this patch's gradient: [17.  1.]
+this patch's normal: [-255.    0.]
+iter 78
+this patch's gradient: [ 3.         38.33333333]
+this patch's normal: [   0. -255.]
+iter 79
+this patch's gradient: [-92.          45.66666667]
+this patch's normal: [-255.    0.]
+iter 80
+this patch's gradient: [ 2.33333333 -8.5       ]
+this patch's normal: [   0. -255.]
+iter 81
+this patch's gradient: [ -4.         -10.66666667]
+this patch's normal: [   0. -255.]
+iter 82
+this patch's gradient: [  7.5        -13.33333333]
+this patch's normal: [   0. -255.]
+iter 83
+this patch's gradient: [  4.16666667 -20.        ]
+this patch's normal: [   0. -255.]
+iter 84
+this patch's gradient: [  3. -20.]
+this patch's normal: [   0. -255.]
+iter 85
+this patch's gradient: [  3.         -17.66666667]
+this patch's normal: [   0. -255.]
+iter 86
+this patch's gradient: [  5. -19.]
+this patch's normal: [   0. -255.]
+iter 87
+this patch's gradient: [15.33333333 -9.        ]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 88
+this patch's gradient: [-14.33333333 -13.66666667]
+this patch's normal: [-255.    0.]
+iter 89
+this patch's gradient: [  2.33333333 -21.        ]
+this patch's normal: [   0. -255.]
+iter 90
+this patch's gradient: [ -7.66666667 -16.33333333]
+this patch's normal: [   0. -255.]
+iter 91
+this patch's gradient: [-35.  54.]
+this patch's normal: [ 114.03946685 -228.0789337 ]
+iter 92
+this patch's gradient: [-10.5  24. ]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 93
+this patch's gradient: [17. -1.]
+this patch's normal: [-255.    0.]
+iter 94
+this patch's gradient: [-43. -76.]
+this patch's normal: [-228.0789337  -114.03946685]
+iter 95
+this patch's gradient: [-98.66666667  -9.16666667]
+this patch's normal: [-255.    0.]
+iter 96
+this patch's gradient: [ -6.         -17.33333333]
+this patch's normal: [   0. -255.]
+iter 97
+this patch's gradient: [-15.           0.66666667]
+this patch's normal: [-255.    0.]
+iter 98
+this patch's gradient: [12.66666667 11.33333333]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 99
+this patch's gradient: [ -5.         -22.66666667]
+this patch's normal: [231.45126661 107.02948745]
+iter 100
+this patch's gradient: [-93. -56.]
+this patch's normal: [-255.    0.]
+iter 101
+this patch's gradient: [ -4.83333333 -17.33333333]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 102
+this patch's gradient: [-10.33333333 -15.83333333]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 103
+this patch's gradient: [ -2.66666667 -32.33333333]
+this patch's normal: [   0. -255.]
+iter 104
+this patch's gradient: [-90. -23.]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 105
+this patch's gradient: [-64.5 -91. ]
+this patch's normal: [-255.    0.]
+iter 106
+this patch's gradient: [-111.66666667   77.66666667]
+this patch's normal: [-255.    0.]
+iter 107
+this patch's gradient: [-60.83333333  77.66666667]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 108
+this patch's gradient: [-88.66666667  66.66666667]
+this patch's normal: [-255.    0.]
+iter 109
+this patch's gradient: [-15.    0.5]
+this patch's normal: [-255.    0.]
+iter 110
+this patch's gradient: [-48.66666667  66.66666667]
+this patch's normal: [   0. -255.]
+iter 111
+this patch's gradient: [-97.66666667  77.66666667]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 112
+this patch's gradient: [-119.          -30.83333333]
+this patch's normal: [232.18641406 105.4251826 ]
+iter 113
+this patch's gradient: [-88.66666667  47.33333333]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 114
+this patch's gradient: [-29.33333333  18.        ]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 115
+this patch's gradient: [-33.33333333  28.83333333]
+this patch's normal: [-255.    0.]
+iter 116
+this patch's gradient: [-15.66666667  24.16666667]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 117
+this patch's gradient: [12.5        33.33333333]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 118
+this patch's gradient: [  5.66666667 100.33333333]
+this patch's normal: [   0. -255.]
+iter 119
+this patch's gradient: [17.  1.]
+this patch's normal: [-255.    0.]
+iter 120
+this patch's gradient: [-37.33333333  46.33333333]
+this patch's normal: [ 114.03946685 -228.0789337 ]
+iter 121
+this patch's gradient: [-92.33333333 -47.16666667]
+this patch's normal: [230.72876906 108.57824426]
+iter 122
+this patch's gradient: [ 1.5        76.66666667]
+this patch's normal: [ 114.03946685 -228.0789337 ]
+iter 123
+this patch's gradient: [ 8.         73.33333333]
+this patch's normal: [   0. -255.]
+iter 124
+this patch's gradient: [ -66.33333333 -151.        ]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 125
+this patch's gradient: [ 97.  -57.5]
+this patch's normal: [-255.    0.]
+iter 126
+this patch's gradient: [-13.83333333 110.66666667]
+this patch's normal: [ 114.03946685 -228.0789337 ]
+iter 127
+this patch's gradient: [81.         -3.33333333]
+this patch's normal: [233.0219449  103.56530884]
+iter 128
+this patch's gradient: [ -34. -111.]
+this patch's normal: [   0. -255.]
+iter 129
+this patch's gradient: [-0.66666667  4.33333333]
+this patch's normal: [214.14840608 138.43937363]
+iter 130
+this patch's gradient: [19.66666667  1.        ]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 131
+this patch's gradient: [23.  2.]
+this patch's normal: [-255.    0.]
+iter 132
+this patch's gradient: [23.         -1.33333333]
+this patch's normal: [-255.    0.]
+iter 133
+this patch's gradient: [48.33333333 48.        ]
+this patch's normal: [234.50814861 100.1545218 ]
+iter 134
+this patch's gradient: [78.         79.33333333]
+this patch's normal: [   0. -255.]
+iter 135
+this patch's gradient: [-122.33333333  -62.16666667]
+this patch's normal: [-255.    0.]
+iter 136
+this patch's gradient: [109.33333333 -20.33333333]
+this patch's normal: [-255.    0.]
+iter 137
+this patch's gradient: [ 64.5        -61.33333333]
+this patch's normal: [ 114.03946685 -228.0789337 ]
+iter 138
+this patch's gradient: [101.66666667  14.5       ]
+this patch's normal: [-255.    0.]
+iter 139
+this patch's gradient: [-128.33333333   67.33333333]
+this patch's normal: [ 180.3122292 -180.3122292]
+RUN.sh: line 17: _size: command not found
+sh RUN.sh  3334.22s user 18.31s system 98% cpu 56:36.31 total
+

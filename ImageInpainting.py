@@ -5,11 +5,6 @@ from skimage.metrics import structural_similarity as ssim
 
 alpha = 255 # normalization factor
 
-# class Image:
-#     def __init__(self, pixels, contour):
-#         self.pixels = pixels
-#         self.contour = contour
-
 class Pixel:
     def __init__(self, r, c, value, is_filled):
         self.r = r
@@ -29,7 +24,7 @@ class Pixel:
     def compute_confidence(self):
         """ Compute confidence of the central pixel of the patch. """
         confidence_sum = sum([ele.confidence for row in self.patch for ele in row if ele.is_filled])
-        confidence = confidence_sum / (self.patch.shape[0]*self.patch.shape[1]) # 面積應該是self.patch.shape[0]*self.patch.shape[1]?
+        confidence = confidence_sum / (self.patch.shape[0]*self.patch.shape[1])
         # print(f"[{self.r}, {self.c}]'s confidence: {self.confidence}")    
         return confidence
     
@@ -71,8 +66,8 @@ class Pixel:
         return gradient_vec
     '''
 
-    def gradient_vector(self, k = 2, printValue = False): # per pixel (Sobel)
-        values = [np.empty(self.patch.shape) for _ in range(3)] # value.shape = [3, patch.shape[0], patch.shape[1]]
+    def gradient_vector(self, k = 2, printValue = False):
+        values = [np.empty(self.patch.shape) for _ in range(3)] # values.shape is [3, patch.shape[0], patch.shape[1]]
         for i in range(self.patch.shape[0]):
             for j in range(self.patch.shape[1]):
                 for channel in range(3):
@@ -87,7 +82,7 @@ class Pixel:
             gr_here, gc_here = np.gradient(values[channel], axis=(0, 1))
             gr.append(gr_here)
             gc.append(gc_here)
-        gr_sum = sum(gr) / 3 # gr_sum.shape = [patch.shape[0], patch.shape[1]]]
+        gr_sum = sum(gr) / 3 # gr_sum.shape is [patch.shape[0], patch.shape[1]]]
         gc_sum = sum(gc) / 3
         max_gradient = -1
         max_gradient_vec = np.array([0, 0])
@@ -102,9 +97,8 @@ class Pixel:
                     max_gradient = gradient
                     max_gradient_vec = np.array([gc_sum[i, j], gr_sum[i, j]])
         # magnitude = np.sqrt(max_gradient_vec.dot(max_gradient_vec))
-        # gradient_vec = max_gradient_vec / magnitude * max_gradient # normalize?
-        gradient_vec = max_gradient_vec
         # self.gradient = magnitude
+        gradient_vec = max_gradient_vec
         self.gradient = max_gradient
         if printValue:
             print(f"this patch's gradient: {gradient_vec}")
@@ -158,12 +152,20 @@ class Pixel:
                 elif next_point == [-1, -1]:
                     next_point = point
                     break
-        normal = np.array([prev_point[1]-next_point[1], prev_point[0]-next_point[0]])
+        
+        normal = np.array([(-1)*(prev_point[1]-next_point[1]), prev_point[0]-next_point[0]])
+        if printValue:
+            print(normal)
         magnitude = np.sqrt(normal.dot(normal))
         normal = normal / magnitude * alpha  # normalize?
         if printValue:
+            print(prev_point, cur_point, next_point)
+            print(normal)
             print(f"this patch's normal: {normal}")
-        return normal
+        if printValue:
+            return normal, prev_point, next_point
+        else:
+            return normal
 
 # Tool function
 def is_contour(pixel):
@@ -198,7 +200,7 @@ def init_image(img_input, img_mask):
                     if i+i_patch-1 > 0 and i+i_patch-1 < img_input.shape[0] and j+j_patch-1 > 0 and j+j_patch-1 < img_input.shape[1]:
                         neighbors[i_patch][j_patch] = img[i+i_patch-1][j+j_patch-1]
                     else:
-                        pixel = Pixel(-1, -1, [-1, -1, -1], -1) # Should not be -1? 算gradient會有問題
+                        pixel = Pixel(-1, -1, [-1, -1, -1], -1)
                         neighbors[i_patch][j_patch] = pixel
             img[i][j].set_neighbors(neighbors)
 
@@ -209,7 +211,7 @@ def init_image(img_input, img_mask):
 def find_maxpriority_patch(img):
     return max(contour_point, key=lambda idx: img[idx[0], idx[1]].compute_patch_priority()) # max_priority_point_idx
 
-def compute_difference(target_patch, source_patch):
+def compute_difference_SSIM(target_patch, source_patch):
     min_SSIM = -1 # if source_patch 不是填滿的
 
     if source_patch.shape != target_patch.shape:
@@ -229,7 +231,7 @@ def compute_difference(target_patch, source_patch):
 
     return ssim_value
 
-def compute_difference_square(target_patch, source_patch, print_val=False):
+def compute_difference(target_patch, source_patch):
     max_diff = float('inf') # if source_patch 不是填滿的
 
     if source_patch.shape != target_patch.shape:
@@ -242,22 +244,13 @@ def compute_difference_square(target_patch, source_patch, print_val=False):
             if not source_patch[i, j].is_filled:
                 return max_diff
             if target_patch[i, j].is_filled:
-                if print_val:
-                    print(source_patch[i, j].value, target_patch[i, j].value)
                 diff_here = np.array(source_patch[i, j].value.astype(np.uint32) - target_patch[i, j].value.astype(np.uint32))
-                if print_val:
-                    print(diff_here)
                 diff_here = np.square(diff_here)
-                if print_val:
-                    print(diff_here)
                 diff += np.sqrt(diff_here.sum())
-                if print_val:
-                    print(diff_here)
-                    print(diff)
 
     return diff
 
-def find_source_patch(target_patch_point_idx, img):
+def find_source_patch_SSIM(target_patch_point_idx, img):
     target_patch = img[target_patch_point_idx[0], target_patch_point_idx[1]].patch
     max_SSIM = -1
     max_SSIM_patch = target_patch
@@ -271,7 +264,7 @@ def find_source_patch(target_patch_point_idx, img):
 
     return max_SSIM_patch
 
-def find_source_patch_square(target_patch_point_idx, img):
+def find_source_patch(target_patch_point_idx, img):
     target_patch = img[target_patch_point_idx[0], target_patch_point_idx[1]].patch
     min_diff = float('inf')
     min_diff_patch = target_patch
@@ -287,7 +280,6 @@ def find_source_patch_square(target_patch_point_idx, img):
 
 def fill_imagedata(target_patch_pixel, source_patch):
     target_patch_pixel.confidence = target_patch_pixel.compute_confidence()
-    # print(target_patch_pixel.confidence, target_patch_pixel.gradient, target_patch_pixel.data)
     for i in range(source_patch.shape[0]):
         for j in range(source_patch.shape[1]):
             if (not target_patch_pixel.patch[i][j].is_filled) and source_patch[i][j].is_filled:
@@ -302,6 +294,9 @@ def update_contour_point(img):
     return
 
 def generate_result_image_test(img_input, img, point_idx, source_patch): # 單純測試有沒有找到欲填範圍的邊緣
+    _ = img[point_idx[0], point_idx[1]].gradient_vector(2, True)
+    _, prev_point, next_point = img[point_idx[0], point_idx[1]].normal_direction(True)
+    
     img_result = np.zeros(img_input.shape, dtype=np.uint8)
     # img_confidence = np.zeros(img_input.shape[:-1], dtype=np.uint8)
     # img_data = np.zeros(img_input.shape[:-1], dtype=np.uint8)
@@ -343,6 +338,8 @@ def generate_result_image_test(img_input, img, point_idx, source_patch): # 單�
     # print(max_data, max_data_norm, max_data_gradient)
     # for point_idx in point_idxs:
     img_result[point_idx[0], point_idx[1]] = [0, 0, 255]
+    img_result[prev_point[0], prev_point[1]] = [0, 255, 0]
+    img_result[next_point[0], next_point[1]] = [0, 255, 0]
     # max_data會到 265.30946553035, norm=[114.03946685 228.0789337 ], gradient=[111.75 240.75]，超過255是正常的嗎？
     # return img_result, img_confidence, img_data, img_gradient
     return img_result
@@ -371,24 +368,20 @@ def main():
     shape = img_input.shape
     img = init_image(img_input, img_mask)
     
-    # for iter in range(10):
     iter = 0
     while len(contour_point) != 0:
         print("iter", iter)
         target_patch_point_idx = find_maxpriority_patch(img)
-        _ = img[target_patch_point_idx[0], target_patch_point_idx[1]].gradient_vector(2, True)
-        _ = img[target_patch_point_idx[0], target_patch_point_idx[1]].normal_direction(True)
 
         source_patch = find_source_patch(target_patch_point_idx, img)
         fill_imagedata(img[target_patch_point_idx[0]][target_patch_point_idx[1]], source_patch)
 
         # img_output, img_confidence, img_data, img_gradient = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
         img_output = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
-        cv2.imwrite(f"./result/test2/result10_iter{iter}.png", img_output)
+        cv2.imwrite(f"./result/data4_test/result10_iter{iter}.png", img_output)
         # cv2.imwrite(f"./result/test4/confidence10_iter{iter}.png", img_confidence)
         # cv2.imwrite(f"./result/test4/data10_iter{iter}.png", img_data)
         # cv2.imwrite(f"./result/test4/gradient10_iter{iter}.png", img_gradient)
-        cv2.imwrite(f"./result/test4/result10_iter{iter}.png", img_output)
         update_contour_point(img)
         iter += 1
     img_output = generate_result_image(img_input, img)
