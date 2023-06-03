@@ -194,6 +194,7 @@ class Pixel:
         return gradient_vec
     '''
 
+    '''
     def normal_direction_old(self, printValue = False):
         cur_point = next((point for point in contour_point if point == [self.r, self.c]), None)
         
@@ -223,7 +224,8 @@ class Pixel:
             return normal, prev_point, next_point
         else:
             return normal
-    
+    '''
+
     def normal_direction(self, printValue = False):
         block = [[self.neighbors[i][j].is_contour for j in range(3)] for i in range(3)]
         
