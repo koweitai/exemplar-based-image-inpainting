@@ -296,10 +296,17 @@ def compute_SSIM(target_patch, source_patch):
     # source_patch 要是滿的，再看 target_patch 有填的點
     for i in range(target_patch.shape[0]):
         for j in range(target_patch.shape[1]):
+            '''
             if not source_patch[i, j].is_filled:
                 return min_SSIM
             img_source[i, j] = source_patch[i, j].value
             img_target[i, j] = target_patch[i, j].value if target_patch[i, j].is_filled else source_patch[i, j].value
+            '''
+            if not source_patch[i, j].is_filled:
+                return min_SSIM
+            if target_patch[i, j].is_filled:
+                img_source[i, j] = source_patch[i, j].value
+                img_target[i, j] = target_patch[i, j].value
     ssim_value = ssim(img_target, img_source, multichannel=True, win_size=patch_size, channel_axis=2)
 
     return ssim_value
@@ -319,7 +326,7 @@ def compute_sumOfSquare(target_patch, source_patch):
             if target_patch[i, j].is_filled:
                 diff_here = np.array(source_patch[i, j].value.astype(np.uint32) - target_patch[i, j].value.astype(np.uint32))
                 diff_here = np.square(diff_here)
-                diff += np.sqrt(diff_here.sum())
+                diff += np.sqrt(diff_here.sum()) / source_patch[i, j].confidence / target_patch[i, j].confidence
     return diff
 
 def find_source_patch(target_patch_point_idx, img):
