@@ -446,7 +446,7 @@ def main():
 
         # img_output, img_confidence, img_data, img_gradient = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
         img_output = generate_result_image_test(img_input, img, target_patch_point_idx, source_patch) # 單純測試有沒有找到欲填範圍的邊緣
-        cv2.imwrite(f"./result/result4_test/result10_iter{iter}.png", img_output)
+        cv2.imwrite(f"./result/result11/result11_iter{iter}.png", img_output)
         # cv2.imwrite(f"./result/test4/confidence10_iter{iter}.png", img_confidence)
         # cv2.imwrite(f"./result/test4/data10_iter{iter}.png", img_data)
         # cv2.imwrite(f"./result/test4/gradient10_iter{iter}.png", img_gradient)
