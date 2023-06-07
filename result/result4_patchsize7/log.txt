@@ -1,0 +1,732 @@
+iter 0
+(1-SSIM)*5000: 89.04268177578167
+sum of Square: 500
+this patch's gradient: [157.33333333   1.        ]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 1
+(1-SSIM)*5000: 7.915701780411566
+sum of Square: 94.24456649133315
+this patch's gradient: [157.33333333   1.        ]
+this patch's normal: [255.   0.]
+iter 2
+(1-SSIM)*5000: 2.100335893908123
+sum of Square: 143.41716989361174
+this patch's gradient: [157.33333333  -6.33333333]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 3
+(1-SSIM)*5000: 1.4475227769406018
+sum of Square: 66.36915495576844
+this patch's gradient: [157.33333333  -6.33333333]
+this patch's normal: [255.   0.]
+iter 4
+(1-SSIM)*5000: 7.040143816469668
+sum of Square: 119.63029408869845
+this patch's gradient: [-83.           7.16666667]
+this patch's normal: [255.   0.]
+iter 5
+(1-SSIM)*5000: 10.400951385058367
+sum of Square: 164.86705327919063
+this patch's gradient: [63.  1.]
+this patch's normal: [255.   0.]
+iter 6
+(1-SSIM)*5000: 2.387494078357477
+sum of Square: 119.996135877912
+this patch's gradient: [ 80. 103.]
+this patch's normal: [255.   0.]
+iter 7
+(1-SSIM)*5000: 32.038462386248526
+sum of Square: 457.69747711508006
+this patch's gradient: [-122.   -2.]
+this patch's normal: [  0. 255.]
+iter 8
+(1-SSIM)*5000: 442.03977097757587
+sum of Square: 500
+this patch's gradient: [-122.           -0.33333333]
+this patch's normal: [255.   0.]
+iter 9
+(1-SSIM)*5000: 257.71936764628356
+sum of Square: 500
+this patch's gradient: [-32.83333333  81.        ]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 10
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [157.33333333   1.        ]
+this patch's normal: [255.   0.]
+iter 11
+(1-SSIM)*5000: 34.66549431580257
+sum of Square: 500
+this patch's gradient: [-94.   8.]
+this patch's normal: [ 114.03946685 -228.0789337 ]
+iter 12
+(1-SSIM)*5000: 0.41569207104796835
+sum of Square: 16.546050282768178
+this patch's gradient: [-83.          -0.16666667]
+this patch's normal: [255.   0.]
+iter 13
+(1-SSIM)*5000: 0.39278708609646884
+sum of Square: 84.5527058253125
+this patch's gradient: [-94.   8.]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 14
+(1-SSIM)*5000: 58.38303359401553
+sum of Square: 500
+this patch's gradient: [-117.    0.]
+this patch's normal: [255.   0.]
+iter 15
+(1-SSIM)*5000: 1.3081176411916529
+sum of Square: 127.30438024292647
+this patch's gradient: [-117.  -56.]
+this patch's normal: [255.   0.]
+iter 16
+(1-SSIM)*5000: 26.097688266413233
+sum of Square: 500
+this patch's gradient: [101.66666667  21.        ]
+this patch's normal: [255.   0.]
+iter 17
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [157.33333333   1.        ]
+this patch's normal: [255.   0.]
+iter 18
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [157.33333333  -6.33333333]
+this patch's normal: [255.   0.]
+iter 19
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [-83.           7.16666667]
+this patch's normal: [-228.0789337  -114.03946685]
+iter 20
+(1-SSIM)*5000: 118.88534241662418
+sum of Square: 500
+this patch's gradient: [96.66666667  2.33333333]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 21
+(1-SSIM)*5000: 49.45151825633598
+sum of Square: 152.8310510102221
+this patch's gradient: [101.           0.66666667]
+this patch's normal: [255.   0.]
+iter 22
+(1-SSIM)*5000: 46.89095583635394
+sum of Square: 500
+this patch's gradient: [96.66666667  1.        ]
+this patch's normal: [255.   0.]
+iter 23
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [-94.   8.]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 24
+(1-SSIM)*5000: 37.58716306819731
+sum of Square: 500
+this patch's gradient: [101.           1.33333333]
+this patch's normal: [255.   0.]
+iter 25
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [157.33333333   1.        ]
+this patch's normal: [255.   0.]
+iter 26
+(1-SSIM)*5000: 6.299449519905909
+sum of Square: 214.212838839058
+this patch's gradient: [  9.33333333 -21.        ]
+this patch's normal: [ 114.03946685 -228.0789337 ]
+iter 27
+(1-SSIM)*5000: 8.965370590961474
+sum of Square: 233.58781510501538
+this patch's gradient: [  9.         -20.33333333]
+this patch's normal: [ 114.03946685 -228.0789337 ]
+iter 28
+(1-SSIM)*5000: 13.894841046560025
+sum of Square: 322.067341429306
+this patch's gradient: [ 17. -11.]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 29
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [157.33333333  -6.33333333]
+this patch's normal: [255.   0.]
+iter 30
+(1-SSIM)*5000: 0.2284499876675783
+sum of Square: 88.36012388452437
+this patch's gradient: [101.33333333   1.83333333]
+this patch's normal: [255.   0.]
+iter 31
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [-94.   8.]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 32
+(1-SSIM)*5000: 26.218514741421227
+sum of Square: 472.4256986105848
+this patch's gradient: [17.33333333 27.66666667]
+this patch's normal: [  0. 255.]
+iter 33
+(1-SSIM)*5000: 35.697664986960035
+sum of Square: 385.5035118222973
+this patch's gradient: [19.66666667  0.        ]
+this patch's normal: [255.   0.]
+iter 34
+(1-SSIM)*5000: 111.66683602392536
+sum of Square: 500
+this patch's gradient: [27.16666667 26.33333333]
+this patch's normal: [   0. -255.]
+iter 35
+(1-SSIM)*5000: 30.026563058225264
+sum of Square: 500
+this patch's gradient: [27.66666667 23.5       ]
+this patch's normal: [255.   0.]
+iter 36
+(1-SSIM)*5000: 29.811190895518425
+sum of Square: 500
+this patch's gradient: [49. -2.]
+this patch's normal: [255.   0.]
+iter 37
+(1-SSIM)*5000: 9.507254564848356
+sum of Square: 372.8505787610611
+this patch's gradient: [28.66666667 12.5       ]
+this patch's normal: [  0. 255.]
+iter 38
+(1-SSIM)*5000: 5.666888970387585
+sum of Square: 377.91504232590796
+this patch's gradient: [38.66666667 -1.66666667]
+this patch's normal: [255.   0.]
+iter 39
+(1-SSIM)*5000: 49.796175899191056
+sum of Square: 500
+this patch's gradient: [157.33333333  -6.33333333]
+this patch's normal: [255.   0.]
+iter 40
+(1-SSIM)*5000: 29.873070836463068
+sum of Square: 500
+this patch's gradient: [ 23.16666667 -25.66666667]
+this patch's normal: [  0. 255.]
+iter 41
+(1-SSIM)*5000: 50.383873547268365
+sum of Square: 500
+this patch's gradient: [-119.          -43.16666667]
+this patch's normal: [255.   0.]
+iter 42
+(1-SSIM)*5000: 78.47776947836616
+sum of Square: 500
+this patch's gradient: [119.  42.]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 43
+(1-SSIM)*5000: 150.07238187785543
+sum of Square: 500
+this patch's gradient: [157.33333333   1.        ]
+this patch's normal: [255.   0.]
+iter 44
+(1-SSIM)*5000: 185.10313946902778
+sum of Square: 500
+this patch's gradient: [-36.33333333 137.33333333]
+this patch's normal: [  0. 255.]
+iter 45
+(1-SSIM)*5000: 1.5086690189725083
+sum of Square: 500
+this patch's gradient: [101.33333333   0.        ]
+this patch's normal: [255.   0.]
+iter 46
+(1-SSIM)*5000: 26.82742116018877
+sum of Square: 500
+this patch's gradient: [58.16666667  1.83333333]
+this patch's normal: [255.   0.]
+iter 47
+(1-SSIM)*5000: 176.12428166982053
+sum of Square: 500
+this patch's gradient: [-129.33333333    1.33333333]
+this patch's normal: [255.   0.]
+iter 48
+(1-SSIM)*5000: 306.80085930498257
+sum of Square: 500
+this patch's gradient: [119.           3.33333333]
+this patch's normal: [255.   0.]
+iter 49
+(1-SSIM)*5000: 443.11992919940093
+sum of Square: 500
+this patch's gradient: [ -15.33333333 -129.66666667]
+this patch's normal: [  0. 255.]
+iter 50
+(1-SSIM)*5000: 0.3571663895529653
+sum of Square: 99.0546732915185
+this patch's gradient: [102.66666667 -37.66666667]
+this patch's normal: [  0. 255.]
+iter 51
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [-117.          -28.16666667]
+this patch's normal: [255.   0.]
+iter 52
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [-57.33333333 -98.        ]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 53
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [-66. -98.]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 54
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [ 70.16666667 -98.        ]
+this patch's normal: [255.   0.]
+iter 55
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [  37.33333333 -115.33333333]
+this patch's normal: [  0. 255.]
+iter 56
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [-94.   8.]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 57
+(1-SSIM)*5000: 8.729764944102602
+sum of Square: 263.46592325202545
+this patch's gradient: [5. 8.]
+this patch's normal: [-114.03946685 -228.0789337 ]
+iter 58
+(1-SSIM)*5000: 9.866639867627814
+sum of Square: 342.7578209191204
+this patch's gradient: [-6.33333333  7.83333333]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 59
+(1-SSIM)*5000: 9.666828716814457
+sum of Square: 361.71895574864476
+this patch's gradient: [-9.33333333 17.        ]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 60
+(1-SSIM)*5000: 3.43642049141224
+sum of Square: 249.02082431221706
+this patch's gradient: [-16.33333333  10.66666667]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 61
+(1-SSIM)*5000: 9.825674589141741
+sum of Square: 326.97689327137357
+this patch's gradient: [ 3.5        24.33333333]
+this patch's normal: [   0. -255.]
+iter 62
+(1-SSIM)*5000: 5.1722188057851115
+sum of Square: 378.12400237587457
+this patch's gradient: [-21.33333333  13.        ]
+this patch's normal: [  0. 255.]
+iter 63
+(1-SSIM)*5000: 20.040322711336046
+sum of Square: 500
+this patch's gradient: [-21.33333333  16.33333333]
+this patch's normal: [255.   0.]
+iter 64
+(1-SSIM)*5000: 8.180358435339041
+sum of Square: 217.72818803341966
+this patch's gradient: [  0.33333333 -11.33333333]
+this patch's normal: [   0. -255.]
+iter 65
+(1-SSIM)*5000: 8.395429746376749
+sum of Square: 398.8561954513874
+this patch's gradient: [ -2.33333333 -15.66666667]
+this patch's normal: [   0. -255.]
+iter 66
+(1-SSIM)*5000: 11.333309072105724
+sum of Square: 323.42876979653954
+this patch's gradient: [20.         14.33333333]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 67
+(1-SSIM)*5000: 18.641350536310885
+sum of Square: 500
+this patch's gradient: [20.         14.33333333]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 68
+(1-SSIM)*5000: 6.347418294521678
+sum of Square: 438.83800439217083
+this patch's gradient: [-74.16666667 -73.5       ]
+this patch's normal: [255.   0.]
+iter 69
+(1-SSIM)*5000: 1.8020655946049402
+sum of Square: 186.47803540383325
+this patch's gradient: [-129.          -19.33333333]
+this patch's normal: [255.   0.]
+iter 70
+(1-SSIM)*5000: 6.574340036353266
+sum of Square: 351.53448291194667
+this patch's gradient: [-129.  -91.]
+this patch's normal: [255.   0.]
+iter 71
+(1-SSIM)*5000: 78.77608331367192
+sum of Square: 500
+this patch's gradient: [-129.          -16.66666667]
+this patch's normal: [255.   0.]
+iter 72
+(1-SSIM)*5000: 17.770058726591653
+sum of Square: 295.01618067505774
+this patch's gradient: [-75.5        -93.66666667]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 73
+(1-SSIM)*5000: 175.9951379366842
+sum of Square: 500
+this patch's gradient: [-73.83333333  49.        ]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 74
+(1-SSIM)*5000: 33.72262352138111
+sum of Square: 500
+this patch's gradient: [ 62.33333333 -78.66666667]
+this patch's normal: [  0. 255.]
+iter 75
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [-99.33333333 -51.66666667]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 76
+(1-SSIM)*5000: 546.2322958728988
+sum of Square: 500
+this patch's gradient: [-53.83333333  92.66666667]
+this patch's normal: [  0. 255.]
+iter 77
+(1-SSIM)*5000: 32.613922328359465
+sum of Square: 500
+this patch's gradient: [-95.         -72.66666667]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 78
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [-94.   8.]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 79
+(1-SSIM)*5000: 130.36997717163544
+sum of Square: 500
+this patch's gradient: [  2.66666667 -92.33333333]
+this patch's normal: [  0. 255.]
+iter 80
+(1-SSIM)*5000: 41.74618273926567
+sum of Square: 500
+this patch's gradient: [-83.          14.66666667]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 81
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [-83.          14.66666667]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 82
+(1-SSIM)*5000: 3.2673243886355285
+sum of Square: 184.0822974608169
+this patch's gradient: [  5.33333333 -11.33333333]
+this patch's normal: [  0. 255.]
+iter 83
+(1-SSIM)*5000: 5.682386265128403
+sum of Square: 500
+this patch's gradient: [-21.33333333   3.33333333]
+this patch's normal: [255.   0.]
+iter 84
+(1-SSIM)*5000: 2.9766620512527986
+sum of Square: 66.31772757667855
+this patch's gradient: [  4.         -15.66666667]
+this patch's normal: [  0. 255.]
+iter 85
+(1-SSIM)*5000: 5.637624934849428
+sum of Square: 368.12286996730677
+this patch's gradient: [ -2.33333333 -15.66666667]
+this patch's normal: [  0. 255.]
+iter 86
+(1-SSIM)*5000: 33.21222347195673
+sum of Square: 500
+this patch's gradient: [-110. -102.]
+this patch's normal: [  0. 255.]
+iter 87
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [ 52.66666667 -70.33333333]
+this patch's normal: [  0. 255.]
+iter 88
+(1-SSIM)*5000: 15.041442381892868
+sum of Square: 500
+this patch's gradient: [-122.66666667    1.        ]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 89
+(1-SSIM)*5000: 323.9472169365093
+sum of Square: 500
+this patch's gradient: [-58.16666667 123.33333333]
+this patch's normal: [  0. 255.]
+iter 90
+(1-SSIM)*5000: 93.6314592701698
+sum of Square: 500
+this patch's gradient: [-56.33333333 134.66666667]
+this patch's normal: [  0. 255.]
+iter 91
+(1-SSIM)*5000: 67.37940133558939
+sum of Square: 500
+this patch's gradient: [85.         -0.33333333]
+this patch's normal: [-114.03946685 -228.0789337 ]
+iter 92
+(1-SSIM)*5000: 20.988171201274387
+sum of Square: 500
+this patch's gradient: [  7.         118.33333333]
+this patch's normal: [  0. 255.]
+iter 93
+(1-SSIM)*5000: 152.43918801497892
+sum of Square: 500
+this patch's gradient: [ 31.66666667 -64.66666667]
+this patch's normal: [  0. 255.]
+iter 94
+(1-SSIM)*5000: 62.769027138174785
+sum of Square: 500
+this patch's gradient: [-83.33333333  37.        ]
+this patch's normal: [  0. 255.]
+iter 95
+(1-SSIM)*5000: 706.8629982470093
+sum of Square: 500
+this patch's gradient: [112.          48.83333333]
+this patch's normal: [ 114.03946685 -228.0789337 ]
+iter 96
+(1-SSIM)*5000: 349.9048480711653
+sum of Square: 500
+this patch's gradient: [ 40.         -78.66666667]
+this patch's normal: [  0. 255.]
+iter 97
+(1-SSIM)*5000: 102.04273687652865
+sum of Square: 500
+this patch's gradient: [99.33333333  9.33333333]
+this patch's normal: [255.   0.]
+iter 98
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [ 64. -65.]
+this patch's normal: [255.   0.]
+iter 99
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [  37.33333333 -115.33333333]
+this patch's normal: [  0. 255.]
+iter 100
+(1-SSIM)*5000: 319.1975634481126
+sum of Square: 500
+this patch's gradient: [48.5 42.5]
+this patch's normal: [255.   0.]
+iter 101
+(1-SSIM)*5000: 960.3964762156353
+sum of Square: 500
+this patch's gradient: [45.83333333 47.66666667]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 102
+(1-SSIM)*5000: 528.5137241001992
+sum of Square: 500
+this patch's gradient: [101.66666667  30.83333333]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 103
+(1-SSIM)*5000: 1.7943175278628543
+sum of Square: 199.59072542701387
+this patch's gradient: [5. 2.]
+this patch's normal: [255.   0.]
+iter 104
+(1-SSIM)*5000: 2.1028223532626455
+sum of Square: 204.01086405133043
+this patch's gradient: [-7.33333333 -3.5       ]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 105
+(1-SSIM)*5000: 216.2776027096419
+sum of Square: 500
+this patch's gradient: [112.66666667 -60.16666667]
+this patch's normal: [255.   0.]
+iter 106
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [14.66666667 83.33333333]
+this patch's normal: [  0. 255.]
+iter 107
+(1-SSIM)*5000: 88.69697377554387
+sum of Square: 500
+this patch's gradient: [ 85.         -39.83333333]
+this patch's normal: [ 228.0789337  -114.03946685]
+iter 108
+(1-SSIM)*5000: 2.7116371186935995
+sum of Square: 500
+this patch's gradient: [-9.33333333 -8.66666667]
+this patch's normal: [255.   0.]
+iter 109
+(1-SSIM)*5000: 55.67495624875185
+sum of Square: 500
+this patch's gradient: [-69.33333333  64.66666667]
+this patch's normal: [-255.    0.]
+iter 110
+(1-SSIM)*5000: 155.1094754237914
+sum of Square: 500
+this patch's gradient: [ 99. -25.]
+this patch's normal: [255.   0.]
+iter 111
+(1-SSIM)*5000: 2.0779979888779776
+sum of Square: 133.32627035832687
+this patch's gradient: [-1.33333333  4.33333333]
+this patch's normal: [  0. 255.]
+iter 112
+(1-SSIM)*5000: 2.1551837103700455
+sum of Square: 70.01759890263668
+this patch's gradient: [0.         4.33333333]
+this patch's normal: [  0. 255.]
+iter 113
+(1-SSIM)*5000: 1.2613976332392918
+sum of Square: 54.421737866469414
+this patch's gradient: [2.66666667 3.66666667]
+this patch's normal: [  0. 255.]
+iter 114
+(1-SSIM)*5000: 2.030564687280356
+sum of Square: 177.45634565859322
+this patch's gradient: [-0.5  4. ]
+this patch's normal: [255.   0.]
+iter 115
+(1-SSIM)*5000: 0.7527702626131116
+sum of Square: 247.42298246040883
+this patch's gradient: [  4.         -15.66666667]
+this patch's normal: [   0. -255.]
+iter 116
+(1-SSIM)*5000: 21.121641428678007
+sum of Square: 500
+this patch's gradient: [ -2.33333333 -15.66666667]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 117
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [103.         -28.16666667]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 118
+(1-SSIM)*5000: 122.3499659066296
+sum of Square: 500
+this patch's gradient: [116.66666667  48.33333333]
+this patch's normal: [180.3122292 180.3122292]
+iter 119
+(1-SSIM)*5000: 74.29471795593778
+sum of Square: 500
+this patch's gradient: [ 69.33333333 111.33333333]
+this patch's normal: [  0. 255.]
+iter 120
+(1-SSIM)*5000: 185.14754367764118
+sum of Square: 500
+this patch's gradient: [112.66666667 -74.        ]
+this patch's normal: [255.   0.]
+iter 121
+(1-SSIM)*5000: 309.0751978706163
+sum of Square: 500
+this patch's gradient: [104.66666667  61.66666667]
+this patch's normal: [255.   0.]
+iter 122
+(1-SSIM)*5000: 5.012775135983527
+sum of Square: 139.38761721079183
+this patch's gradient: [8.5        2.66666667]
+this patch's normal: [   0. -255.]
+iter 123
+(1-SSIM)*5000: 2.5678287618635665
+sum of Square: 500
+this patch's gradient: [ 0.33333333 -8.66666667]
+this patch's normal: [  0. 255.]
+iter 124
+(1-SSIM)*5000: 0.5202835543333117
+sum of Square: 136.11295047365184
+this patch's gradient: [-6.         -1.66666667]
+this patch's normal: [255.   0.]
+iter 125
+(1-SSIM)*5000: 2.974694132816258
+sum of Square: 500
+this patch's gradient: [  4.         -15.66666667]
+this patch's normal: [   0. -255.]
+iter 126
+(1-SSIM)*5000: 5.717965067569275
+sum of Square: 157.92075319608637
+this patch's gradient: [0.66666667 5.        ]
+this patch's normal: [   0. -255.]
+iter 127
+(1-SSIM)*5000: 0.0
+sum of Square: 0.0
+this patch's gradient: [ 35.33333333 113.        ]
+this patch's normal: [-180.3122292 -180.3122292]
+iter 128
+(1-SSIM)*5000: 55.10844908870993
+sum of Square: 500
+this patch's gradient: [53.16666667 74.66666667]
+this patch's normal: [  0. 255.]
+iter 129
+(1-SSIM)*5000: 140.49738708964142
+sum of Square: 500
+this patch's gradient: [ -54.16666667 -102.        ]
+this patch's normal: [  0. 255.]
+iter 130
+(1-SSIM)*5000: 287.36608449260905
+sum of Square: 500
+this patch's gradient: [ 88. -76.]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 131
+(1-SSIM)*5000: 146.4166333360445
+sum of Square: 500
+this patch's gradient: [ 28.         126.33333333]
+this patch's normal: [  0. 255.]
+iter 132
+(1-SSIM)*5000: 269.58038531966264
+sum of Square: 500
+this patch's gradient: [-122.           -6.83333333]
+this patch's normal: [180.3122292 180.3122292]
+iter 133
+(1-SSIM)*5000: 9.976158225468158
+sum of Square: 500
+this patch's gradient: [-110.           -2.33333333]
+this patch's normal: [-228.0789337  -114.03946685]
+iter 134
+(1-SSIM)*5000: 72.6163174263994
+sum of Square: 500
+this patch's gradient: [-71.66666667  96.        ]
+this patch's normal: [  0. 255.]
+iter 135
+(1-SSIM)*5000: 14.897285232621794
+sum of Square: 500
+this patch's gradient: [157.66666667   2.        ]
+this patch's normal: [255.   0.]
+iter 136
+(1-SSIM)*5000: 146.96840441321245
+sum of Square: 500
+this patch's gradient: [  80.5        -115.33333333]
+this patch's normal: [255.   0.]
+iter 137
+(1-SSIM)*5000: 330.6234954140508
+sum of Square: 500
+this patch's gradient: [-109.33333333   59.83333333]
+this patch's normal: [255.   0.]
+iter 138
+(1-SSIM)*5000: 113.68124317872541
+sum of Square: 500
+this patch's gradient: [-77.         137.33333333]
+this patch's normal: [ 180.3122292 -180.3122292]
+iter 139
+(1-SSIM)*5000: 182.7859616431965
+sum of Square: 500
+this patch's gradient: [ 52.33333333 113.        ]
+this patch's normal: [  0. 255.]
+iter 140
+(1-SSIM)*5000: 16.67241441520362
+sum of Square: 500
+this patch's gradient: [18.66666667 -8.        ]
+this patch's normal: [255.   0.]
+iter 141
+(1-SSIM)*5000: 3.091228468227736
+sum of Square: 500
+this patch's gradient: [  4.         -15.66666667]
+this patch's normal: [   0. -255.]
+iter 142
+(1-SSIM)*5000: 3.2941286593390906
+sum of Square: 457.8209315018995
+this patch's gradient: [-4.  0.]
+this patch's normal: [255.   0.]
+iter 143
+(1-SSIM)*5000: 86.37312542615349
+sum of Square: 500
+this patch's gradient: [18.66666667 -1.5       ]
+this patch's normal: [255.   0.]
+iter 144
+(1-SSIM)*5000: 212.9973343289421
+sum of Square: 500
+this patch's gradient: [142.33333333 -11.33333333]
+this patch's normal: [   0. -255.]
+iter 145
+(1-SSIM)*5000: 1358.9979876183572
+sum of Square: 500
+this patch's gradient: [-137.66666667   -2.        ]
+this patch's normal: [   0. -255.]
+sh RUN.sh  10533.44s user 12.31s system 99% cpu 2:55:59.21 total
+
